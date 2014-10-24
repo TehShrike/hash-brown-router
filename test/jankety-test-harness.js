@@ -13,25 +13,24 @@ function addTest(description, fn) {
 
 var queuedUp = []
 
+var testIsRunning = false
+var domIsReady = false
+var tapStarted = false
+function startIfNecessary() {
+	if (!testIsRunning && domIsReady && tapStarted) {
+		testIsRunning = true
+		runNext()
+	}
+}
+
 function runNext() {
 	var next = queuedUp.shift()
 	if (next) {
 		next()
 	} else {
-		console.log('all done')
+		testIsRunning = false
 	}
 }
-
-var started = false
-var domIsReady = false
-var tapStarted = false
-function startIfNecessary() {
-	if (!started && domIsReady && tapStarted) {
-		started = true
-		runNext()
-	}
-}
-
 
 function start() {
 	allTests.forEach(function(next) {

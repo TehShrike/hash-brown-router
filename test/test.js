@@ -2,7 +2,6 @@ var router = require('../')
 var tester = require('./jankety-test-harness.js')
 
 tester.add('routing on a simple url', function(t, done) {
-	console.log('starting the first')
 	var route = router()
 
 	t.plan(1)
@@ -23,7 +22,6 @@ tester.add('routing on a simple url', function(t, done) {
 
 	setTimeout(function() {
 		route.stop()
-		console.log('done with the first')
 		done()
 	}, 500)
 })
@@ -31,7 +29,6 @@ tester.add('routing on a simple url', function(t, done) {
 tester.add('default function is called when nothing matches', function(t, done) {
 	t.plan(1)
 
-	console.log('starting the second')
 	var route = router()
 
 	var fail = t.fail.bind(t, 'the wrong route was called')
@@ -46,7 +43,6 @@ tester.add('default function is called when nothing matches', function(t, done) 
 	location.hash = '/lulz'
 
 	setTimeout(function() {
-		console.log('done with the second')
 		route.stop()
 		done()
 	}, 500)
@@ -72,9 +68,31 @@ tester.add('evaluating the current path instead of waiting for an onhashchange',
 			t.fail('the default route was called')
 		})
 
+		// may not always want the route to fire in the same tick?
 		route.go()
+
 		route.stop()
 
+		done()
+	}, 500)
+})
+
+tester.add('matching an express-style url, getting parameters back', function(t, done) {
+	var route = router()
+
+	t.plan(2)
+
+	route.add('/no/way', t.fail.bind(t, 'the wrong route was called'))
+
+	route.add('/my/:special', function(parameters) {
+		t.equal(typeof parameters, 'object', 'parameters object is an object')
+		t.equal(parameters.special, 'input')
+	})
+
+	location.hash = '/my/input'
+
+	setTimeout(function() {
+		route.stop()
 		done()
 	}, 500)
 })
