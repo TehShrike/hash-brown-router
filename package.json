@@ -1,0 +1,38 @@
+{
+  "name": "hash-router",
+  "version": "1.0.0",
+  "description": "A client-side router that only cares about the bits after the #",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TehShrike/hash-router.git"
+  },
+  "keywords": [
+    "route",
+    "routing",
+    "router",
+    "browserify",
+    "browser"
+  ],
+  "author": "TehShrike",
+  "license": "WTFPL",
+  "bugs": {
+    "url": "https://github.com/TehShrike/hash-router/issues"
+  },
+  "homepage": "https://github.com/TehShrike/hash-router",
+  "scripts": {
+    "test": "tap ./test/*.js",
+    "watch": "watchify test/test.js -o test/build.js -d",
+    "build": "browserify js/index.js | uglifyjs -m > js/build.js"
+  },
+  "devDependencies": {
+    "path-to-regexp-with-reversible-keys": "^1.0.1",
+    "prova": "^1.14.3"
+  },
+  "dependencies": {
+    "path-to-regexp-with-reversible-keys": "^1.0.1"
+  }
+}
