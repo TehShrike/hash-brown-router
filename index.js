@@ -13,6 +13,13 @@ function add(routes, routeString, routeFunction) {
 	routes.push(newRoute)
 }
 
+function makeParametersObject(keys, regexResult) {
+	return keys.reduce(function(memo, urlKey, index) {
+		memo[urlKey.name] = regexResult[index + 1]
+		return memo
+	}, {})
+}
+
 function onHashChange(routes) {
 	var path = removeHashFromPath(location.hash)
 	var matchingRoute = routes.reduce(function(found, route) {
@@ -30,8 +37,8 @@ function onHashChange(routes) {
 	}, null)
 
 	if (matchingRoute) {
-		console.log(matchingRoute)
-		matchingRoute.route.fn()
+		var params = makeParametersObject(matchingRoute.route.keys, matchingRoute.regexResult)
+		matchingRoute.route.fn(params)
 	} else if (routes.defaultFn) {
 		routes.defaultFn()
 	}
