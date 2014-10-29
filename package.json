@@ -4,7 +4,8 @@
   "description": "A client-side router that only cares about the bits after the #",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "browserify test/test.js -o test/build.js -d && echo 'now open test/index.html in a browser'",
+    "watch": "watchify test/test.js -o test/build.js -d"
   },
   "repository": {
     "type": "git",
@@ -23,14 +24,11 @@
     "url": "https://github.com/TehShrike/hash-router/issues"
   },
   "homepage": "https://github.com/TehShrike/hash-router",
-  "scripts": {
-    "test": "tap ./test/*.js",
-    "watch": "watchify test/test.js -o test/build.js -d",
-    "build": "browserify js/index.js | uglifyjs -m > js/build.js"
-  },
   "devDependencies": {
+    "domready": "^1.0.7",
     "path-to-regexp-with-reversible-keys": "^1.0.1",
-    "prova": "^1.14.3"
+    "tap-browser-color": "^0.1.2",
+    "tape": "^3.0.1"
   },
   "dependencies": {
     "path-to-regexp-with-reversible-keys": "^1.0.1"

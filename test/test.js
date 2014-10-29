@@ -27,7 +27,7 @@ tester.add('routing on a simple url', function(t, done) {
 })
 
 tester.add('default function is called when nothing matches', function(t, done) {
-	t.plan(1)
+	t.plan(2)
 
 	var route = router()
 
@@ -36,8 +36,9 @@ tester.add('default function is called when nothing matches', function(t, done) 
 	route.add('/butts', fail)
 	route.add('/non-butts', fail)
 
-	route.setDefault(function() {
+	route.setDefault(function(path) {
 		t.pass('the default route was called')
+		t.equal('/lulz', path, 'the default path was passed in')
 	})
 
 	location.hash = '/lulz'

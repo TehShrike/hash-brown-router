@@ -40,7 +40,7 @@ function onHashChange(routes) {
 		var params = makeParametersObject(matchingRoute.route.keys, matchingRoute.regexResult)
 		matchingRoute.route.fn(params)
 	} else if (routes.defaultFn) {
-		routes.defaultFn()
+		routes.defaultFn(path)
 	}
 }
 

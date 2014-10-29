@@ -34,12 +34,9 @@ function runNext() {
 
 function start() {
 	allTests.forEach(function(next) {
-		console.log('prepping', next.description)
 		test(next.description, function(t) {
 			tapStarted = true
-			console.log('inside test function', next.description)
 			queuedUp.push(function() {
-				console.log('running queued up test')
 				location.hash = ''
 				process.nextTick(function() {
 					next.fn(t, function() {
