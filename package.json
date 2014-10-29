@@ -1,5 +1,5 @@
 {
-  "name": "hash-router",
+  "name": "hash-brown-router",
   "version": "1.0.0",
   "description": "A client-side router that only cares about the bits after the #",
   "main": "index.js",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/TehShrike/hash-router.git"
+    "url": "https://github.com/TehShrike/hash-brown-router.git"
   },
   "keywords": [
     "route",
@@ -21,9 +21,9 @@
   "author": "TehShrike",
   "license": "WTFPL",
   "bugs": {
-    "url": "https://github.com/TehShrike/hash-router/issues"
+    "url": "https://github.com/TehShrike/hash-brown-router/issues"
   },
-  "homepage": "https://github.com/TehShrike/hash-router",
+  "homepage": "https://github.com/TehShrike/hash-brown-router",
   "devDependencies": {
     "domready": "^1.0.7",
     "path-to-regexp-with-reversible-keys": "^1.0.1",
