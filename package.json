@@ -1,6 +1,6 @@
 {
   "name": "hash-brown-router",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A client-side router that only cares about the bits after the #",
   "main": "index.js",
   "scripts": {
@@ -28,7 +28,8 @@
     "domready": "^1.0.7",
     "path-to-regexp-with-reversible-keys": "^1.0.1",
     "tap-browser-color": "^0.1.2",
-    "tape": "^3.0.1"
+    "tape": "^3.0.1",
+    "xtend": "^4.0.0"
   },
   "dependencies": {
     "path-to-regexp-with-reversible-keys": "^1.0.1"

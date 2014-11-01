@@ -15,17 +15,25 @@ A router that is only concerned with single-page apps that want to change state 
 
 Parses [express-style](https://forbeslindesay.github.io/express-route-tester/) route paths, using a fork of [path-to-regexp](https://github.com/pillarjs/path-to-regexp).
 
-## Default route
+## To evaluate the first route
 
-	router.setDefault(function(path) {
-		console.log("you went to", path, "but that doesn't go anywhere, I guess I'll send you somewhere else")
+	router.go('/home')
+
+Forces the library to evaluate the current route from location.hash.  Probably best do do once the [dom is ready](https://www.npmjs.org/package/domready).
+
+If location.hash is currently empty, it sets it to the value you pass in.
+
+## Default/404 route
+
+	router.setDefault(function(path, parameters) {
+		console.log("you went to", path, "but that doesn't go anywhere, I guess you just end up here")
 	})
 
 ## Other
 
-	To force the routing library to evaluate the current route once your JavaScript is done loading (probably once the [dom is ready](https://www.npmjs.org/package/domready)), call `router.go()`.
+### stop()
 
-	If for some reason you want the router to start ignoring hash change events. you can call `route.stop()`.
+If for some reason you want the router to start ignoring hash change events. you can call `route.stop()`.
 
 License
 ======

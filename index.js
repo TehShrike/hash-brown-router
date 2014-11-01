@@ -1,63 +1,6 @@
 var pathToRegexp = require('path-to-regexp-with-reversible-keys')
-
-function removeHashFromPath(path) {
-	return path && path.substr(1)
-}
-
-function add(routes, routeString, routeFunction) {
-	if (typeof routeFunction !== 'function') {
-		throw new Error('The router add function must be passed a callback function')
-	}
-	var newRoute = pathToRegexp(routeString)
-	newRoute.fn = routeFunction
-	routes.push(newRoute)
-}
-
-function makeParametersObject(keys, regexResult) {
-	return keys.reduce(function(memo, urlKey, index) {
-		memo[urlKey.name] = regexResult[index + 1]
-		return memo
-	}, {})
-}
-
-function evaluatePath(routes, path) {
-	var matchingRoute = routes.reduce(function(found, route) {
-		if (found) {
-			return found
-		} else {
-			var matchingRegex = route.exec(path)
-			if (matchingRegex) {
-				return {
-					regexResult: matchingRegex,
-					route: route
-				}
-			}
-		}
-	}, null)
-
-	if (matchingRoute) {
-		var params = makeParametersObject(matchingRoute.route.keys, matchingRoute.regexResult)
-		matchingRoute.route.fn(params)
-	} else if (routes.defaultFn) {
-		routes.defaultFn(path)
-	}
-}
-
-function evaluateCurrentPath(routes) {
-	evaluatePath(routes, removeHashFromPath(location.hash))
-}
-
-function go(routes, defaultPath) {
-	if (location.hash) {
-		evaluateCurrentPath(routes)
-	} else {
-		evaluatePath(routes, defaultPath)
-	}
-}
-
-function setDefault(routes, defaultFn) {
-	routes.defaultFn = defaultFn
-}
+var qs = require('querystring')
+var xtend = require('xtend')
 
 module.exports = function Router() {
 	var routes = []
@@ -77,3 +20,77 @@ module.exports = function Router() {
 		setDefault: setDefault.bind(null, routes)
 	}
 }
+
+function evaluateCurrentPath(routes) {
+	evaluatePath(routes, removeHashFromPath(location.hash))
+}
+
+function removeHashFromPath(path) {
+	return path && path.substr(1)
+}
+
+function getPathParts(path) {
+	var chunks = path.split('?')
+	return {
+		path: chunks.shift(),
+		queryString: qs.parse(chunks.join(''))
+	}
+}
+
+function evaluatePath(routes, path) {
+	var pathParts = getPathParts(path)
+	path = pathParts.path
+
+	var matchingRoute = routes.reduce(function(found, route) {
+		if (found) {
+			return found
+		} else {
+			var matchingRegex = route.exec(path)
+			if (matchingRegex) {
+				return {
+					regexResult: matchingRegex,
+					route: route
+				}
+			}
+		}
+	}, null)
+
+	var queryStringParameters = pathParts.queryString
+
+	if (matchingRoute) {
+		var routeParameters = makeParametersObjectFromRegexResult(matchingRoute.route.keys, matchingRoute.regexResult)
+		var params = xtend(queryStringParameters, routeParameters)
+		matchingRoute.route.fn(params)
+	} else if (routes.defaultFn) {
+		routes.defaultFn(path, queryStringParameters)
+	}
+}
+
+function makeParametersObjectFromRegexResult(keys, regexResult) {
+	return keys.reduce(function(memo, urlKey, index) {
+		memo[urlKey.name] = regexResult[index + 1]
+		return memo
+	}, {})
+}
+
+function add(routes, routeString, routeFunction) {
+	if (typeof routeFunction !== 'function') {
+		throw new Error('The router add function must be passed a callback function')
+	}
+	var newRoute = pathToRegexp(routeString)
+	newRoute.fn = routeFunction
+	routes.push(newRoute)
+}
+
+function go(routes, defaultPath) {
+	if (location.hash) {
+		evaluateCurrentPath(routes)
+	} else {
+		location.hash = defaultPath
+	}
+}
+
+function setDefault(routes, defaultFn) {
+	routes.defaultFn = defaultFn
+}
+

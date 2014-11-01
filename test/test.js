@@ -81,12 +81,13 @@ tester.add('evaluating the current path instead of waiting for an onhashchange',
 tester.add('matching an express-style url, getting parameters back', function(t, done) {
 	var route = router()
 
-	t.plan(2)
+	t.plan(3)
 
 	route.add('/no/way', t.fail.bind(t, 'the wrong route was called'))
 
 	route.add('/my/:special', function(parameters) {
 		t.equal(typeof parameters, 'object', 'parameters object is an object')
+		t.equal(Object.keys(parameters).length, 1, 'parameters object has one property')
 		t.equal(parameters.special, 'input')
 	})
 
@@ -101,14 +102,15 @@ tester.add('matching an express-style url, getting parameters back', function(t,
 tester.add('route.go calls the default route when the current path is empty', function(t, done) {
 	var route = router()
 
-	t.plan(1)
+	t.plan(2)
 
-	route.add('/def', t.pass.bind(t, 'the default route was called'))
+	route.add('/default', t.pass.bind(t, 'the default route was called'))
 	route.add('/other', t.fail.bind(t, 'the wrong route was called'))
 
-	route.go('/def')
+	route.go('/default')
 
 	setTimeout(function() {
+		t.equal(location.hash, '#/default', 'the hash was set to the default from the route.go call')
 		route.stop()
 		done()
 	}, 200)
@@ -122,10 +124,10 @@ tester.add('route.go does not call the default route when the current path is no
 	setTimeout(function() {
 		var route = router()
 
-		route.add('/def', t.fail.bind(t, 'the default route was called incorrectly'))
+		route.add('/default', t.fail.bind(t, 'the default route was called incorrectly'))
 		route.add('/starting-path', t.pass.bind(t, 'the correct route was called'))
 
-		route.go('/def')
+		route.go('/default')
 
 		setTimeout(function() {
 			route.stop()
@@ -136,6 +138,62 @@ tester.add('route.go does not call the default route when the current path is no
 
 })
 
+tester.add('parmeters include values from querystring', function(t, done) {
+	t.plan(4)
 
+	var route = router()
+
+	route.add('myroute/:fromUrl', function(parameters) {
+		t.equal(typeof parameters, 'object', 'parameters object is an object')
+		t.equal(Object.keys(parameters).length, 2, 'parameters object has two properties')
+		t.equal(parameters.fromUrl, 'value1', 'Value from the url parameter is correct')
+		t.equal(parameters.fromQueryString, 'value2', 'Value from the query string is correct')
+	})
+
+	location.hash = 'myroute/value1?fromQueryString=value2'
+
+	setTimeout(function() {
+		route.stop()
+		done()
+	}, 200)
+})
+
+tester.add('parameters from route overwrite querystring parameters', function(t, done) {
+	t.plan(3)
+
+	var route = router()
+
+	route.add('myroute/:fromUrl', function(parameters) {
+		t.equal(typeof parameters, 'object', 'parameters object is an object')
+		t.equal(Object.keys(parameters).length, 1, 'parameters object has one property')
+		t.equal(parameters.fromUrl, 'value1', 'Value is from the route parameter')
+	})
+
+	location.hash = 'myroute/value1?fromUrl=value2'
+
+	setTimeout(function() {
+		route.stop()
+		done()
+	}, 200)
+})
+
+tester.add('querystring parameters passed to the default route', function(t, done) {
+	var route = router()
+
+	t.plan(3)
+
+	route.setDefault(function(path, parameters) {
+		t.equal(typeof parameters, 'object', 'parameters object is an object')
+		t.equal(parameters.lol, 'wut', 'value from the querystring was passed in')
+		t.equal(path, '/default', 'the /default path was correctly passed in')
+	})
+
+	route.go('/default?lol=wut')
+
+	setTimeout(function() {
+		route.stop()
+		done()
+	}, 200)
+})
 
 tester.start()
