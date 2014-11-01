@@ -83,7 +83,7 @@ function add(routes, routeString, routeFunction) {
 }
 
 function go(routes, defaultPath) {
-	if (location.hash) {
+	if (removeHashFromPath(location.hash)) {
 		evaluateCurrentPath(routes)
 	} else {
 		location.hash = defaultPath
