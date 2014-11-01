@@ -23,7 +23,7 @@ tester.add('routing on a simple url', function(t, done) {
 	setTimeout(function() {
 		route.stop()
 		done()
-	}, 500)
+	}, 200)
 })
 
 tester.add('default function is called when nothing matches', function(t, done) {
@@ -46,7 +46,7 @@ tester.add('default function is called when nothing matches', function(t, done) 
 	setTimeout(function() {
 		route.stop()
 		done()
-	}, 500)
+	}, 200)
 })
 
 tester.add('evaluating the current path instead of waiting for an onhashchange', function(t, done) {
@@ -75,7 +75,7 @@ tester.add('evaluating the current path instead of waiting for an onhashchange',
 		route.stop()
 
 		done()
-	}, 500)
+	}, 200)
 })
 
 tester.add('matching an express-style url, getting parameters back', function(t, done) {
@@ -95,7 +95,47 @@ tester.add('matching an express-style url, getting parameters back', function(t,
 	setTimeout(function() {
 		route.stop()
 		done()
-	}, 500)
+	}, 200)
 })
+
+tester.add('route.go calls the default route when the current path is empty', function(t, done) {
+	var route = router()
+
+	t.plan(1)
+
+	route.add('/def', t.pass.bind(t, 'the default route was called'))
+	route.add('/other', t.fail.bind(t, 'the wrong route was called'))
+
+	route.go('/def')
+
+	setTimeout(function() {
+		route.stop()
+		done()
+	}, 200)
+})
+
+tester.add('route.go does not call the default route when the current path is not empty', function(t, done) {
+	location.hash = '/starting-path'
+
+	t.plan(1)
+
+	setTimeout(function() {
+		var route = router()
+
+		route.add('/def', t.fail.bind(t, 'the default route was called incorrectly'))
+		route.add('/starting-path', t.pass.bind(t, 'the correct route was called'))
+
+		route.go('/def')
+
+		setTimeout(function() {
+			route.stop()
+			done()
+		}, 200)
+
+	}, 100)
+
+})
+
+
 
 tester.start()

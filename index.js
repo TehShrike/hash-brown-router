@@ -20,8 +20,7 @@ function makeParametersObject(keys, regexResult) {
 	}, {})
 }
 
-function onHashChange(routes) {
-	var path = removeHashFromPath(location.hash)
+function evaluatePath(routes, path) {
 	var matchingRoute = routes.reduce(function(found, route) {
 		if (found) {
 			return found
@@ -44,6 +43,18 @@ function onHashChange(routes) {
 	}
 }
 
+function evaluateCurrentPath(routes) {
+	evaluatePath(routes, removeHashFromPath(location.hash))
+}
+
+function go(routes, defaultPath) {
+	if (location.hash) {
+		evaluateCurrentPath(routes)
+	} else {
+		evaluatePath(routes, defaultPath)
+	}
+}
+
 function setDefault(routes, defaultFn) {
 	routes.defaultFn = defaultFn
 }
@@ -51,18 +62,18 @@ function setDefault(routes, defaultFn) {
 module.exports = function Router() {
 	var routes = []
 
-	var listener = onHashChange.bind(null, routes)
+	var onHashChange = evaluateCurrentPath.bind(null, routes)
 
-	window.addEventListener('hashchange', listener)
+	window.addEventListener('hashchange', onHashChange)
 
 	function stop() {
-		window.removeEventListener('hashchange', listener)
+		window.removeEventListener('hashchange', onHashChange)
 	}
 
 	return {
 		add: add.bind(null, routes),
 		stop: stop,
-		go: listener,
+		go: go.bind(null, routes),
 		setDefault: setDefault.bind(null, routes)
 	}
 }
