@@ -70,7 +70,7 @@ tester.add('evaluating the current path instead of waiting for an onhashchange',
 		})
 
 		// may not always want the route to fire in the same tick?
-		route.go()
+		route.evaluate()
 
 		route.stop()
 
@@ -99,7 +99,7 @@ tester.add('matching an express-style url, getting parameters back', function(t,
 	}, 200)
 })
 
-tester.add('route.go calls the default route when the current path is empty', function(t, done) {
+tester.add('route.evaluate calls the default route when the current path is empty', function(t, done) {
 	var route = router()
 
 	t.plan(2)
@@ -107,16 +107,16 @@ tester.add('route.go calls the default route when the current path is empty', fu
 	route.add('/default', t.pass.bind(t, 'the default route was called'))
 	route.add('/other', t.fail.bind(t, 'the wrong route was called'))
 
-	route.go('/default')
+	route.evaluate('/default')
 
 	setTimeout(function() {
-		t.equal(location.hash, '#/default', 'the hash was set to the default from the route.go call')
+		t.equal(location.hash, '#/default', 'the hash was set to the default from the route.evaluate call')
 		route.stop()
 		done()
 	}, 200)
 })
 
-tester.add('route.go does not call the default route when the current path is not empty', function(t, done) {
+tester.add('route.evaluate does not call the default route when the current path is not empty', function(t, done) {
 	location.hash = '/starting-path'
 
 	t.plan(1)
@@ -127,7 +127,7 @@ tester.add('route.go does not call the default route when the current path is no
 		route.add('/default', t.fail.bind(t, 'the default route was called incorrectly'))
 		route.add('/starting-path', t.pass.bind(t, 'the correct route was called'))
 
-		route.go('/default')
+		route.evaluate('/default')
 
 		setTimeout(function() {
 			route.stop()
@@ -188,12 +188,51 @@ tester.add('querystring parameters passed to the default route', function(t, don
 		t.equal(path, '/default', 'the /default path was correctly passed in')
 	})
 
-	route.go('/default?lol=wut')
+	route.evaluate('/default?lol=wut')
 
 	setTimeout(function() {
 		route.stop()
 		done()
 	}, 200)
+})
+
+tester.add('replacing a url', function(t) {
+	t.plan(4)
+
+	var route = router()
+
+	var startingHistoryLength = history.length
+
+	function shouldHappenOnce(name, cb) {
+		var happened = false
+		return function() {
+			if (happened) {
+				t.fail(name + ' already happened once')
+			} else {
+				t.pass(name + ' happened')
+				happened = true
+			}
+			cb && cb.apply(null, arguments)
+		}
+	}
+
+	route.add('/initial', shouldHappenOnce('initial route', function() {
+		location.hash = '/redirect' // history length++
+	}))
+
+	route.add('/redirect', shouldHappenOnce('redirect route', function() {
+		route.replace('/destination')
+	}))
+
+	route.add('/destination', shouldHappenOnce('destination route', function() {
+		var historyDepth = history.length - startingHistoryLength
+		t.equal(historyDepth, 2, 'should be two more items in the history then there were before (was ' + historyDepth + ')')
+		t.end()
+	}))
+
+	route.setDefault(t.fail.bind(t, 'default route called'))
+
+	location.hash = '/initial' // history length++
 })
 
 tester.start()

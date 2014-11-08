@@ -16,8 +16,9 @@ module.exports = function Router() {
 	return {
 		add: add.bind(null, routes),
 		stop: stop,
-		go: go.bind(null, routes),
-		setDefault: setDefault.bind(null, routes)
+		evaluate: go.bind(null, routes),
+		setDefault: setDefault.bind(null, routes),
+		replace: replace
 	}
 }
 
@@ -26,7 +27,7 @@ function evaluateCurrentPath(routes) {
 }
 
 function removeHashFromPath(path) {
-	return path && path.substr(1)
+	return (path && path[0] === '#') ? path.substr(1) : path
 }
 
 function getPathParts(path) {
@@ -94,3 +95,6 @@ function setDefault(routes, defaultFn) {
 	routes.defaultFn = defaultFn
 }
 
+function replace(newPath) {
+	location.replace(location.origin + location.pathname + '#' + newPath)
+}

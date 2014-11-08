@@ -9,7 +9,7 @@ A router that is only concerned with single-page apps that want to change state 
 
 	var router = makeRouter()
 
-## To add routes
+## `add(routeString, cb)` - add routes
 
 	router.add('/page/:pageName', function(parameters) {
 		console.log(parameters.pageName)
@@ -17,23 +17,35 @@ A router that is only concerned with single-page apps that want to change state 
 
 Parses [express-style](https://forbeslindesay.github.io/express-route-tester/) route paths, using a fork of [path-to-regexp](https://github.com/pillarjs/path-to-regexp).
 
-## To evaluate the first route
-
-	router.go('/home')
-
-Forces the library to evaluate the current route from location.hash.  Probably best do do once the [dom is ready](https://www.npmjs.org/package/domready).
-
-If location.hash is currently empty, it sets it to the value you pass in.
-
-## Default/404 route
+## `setDefault(cb)` - set a default/404 route
 
 	router.setDefault(function(path, parameters) {
 		console.log("you went to", path, "but that doesn't go anywhere, I guess you just end up here")
 	})
 
+Called whenever the hash route changes, but no other matching route is found.
+
+## `replace(newPath)` - replace the current route in the browser history
+
+	router.add('/page/:pageName', function(parameters) {
+		if (doesNotExistInTheDatabase(parameters.pageName)) {
+			router.replace('/pageNotFound')
+		}
+	})
+
+Convenience method for `location.replace(location.origin + location.pathname + '#' + newPath)`.
+
+## `evaluate(defaultPath)` - evaluate the current url
+
+Forces the library to evaluate the current route from location.hash.  Probably best do do once the [dom is ready](https://www.npmjs.org/package/domready).
+
+	router.evaluate('/home')
+
+If location.hash is currently empty, it changes the path to the default path value you pass in.
+
 ## Other
 
-### stop()
+### `stop()`
 
 If for some reason you want the router to start ignoring hash change events. you can call `route.stop()`.
 
