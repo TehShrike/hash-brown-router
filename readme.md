@@ -35,11 +35,11 @@ Called whenever the hash route changes, but no other matching route is found.
 
 Convenience method for `location.replace(location.origin + location.pathname + '#' + newPath)`.
 
-## `evaluate(defaultPath)` - evaluate the current url
+## `evaluateCurrent(defaultPath)` - evaluate the current url
 
 Forces the library to evaluate the current route from location.hash.  Probably best do do once the [dom is ready](https://www.npmjs.org/package/domready).
 
-	router.evaluate('/home')
+	router.evaluateCurrent('/home')
 
 If location.hash is currently empty, it changes the path to the default path value you pass in.
 
