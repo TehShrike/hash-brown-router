@@ -1,34 +1,35 @@
 var pathToRegexp = require('path-to-regexp-with-reversible-keys')
 var qs = require('querystring')
 var xtend = require('xtend')
+var browserHashLocation = require('./hash-location.js')
 
-module.exports = function Router() {
+module.exports = function Router(hashLocation) {
+	if (!hashLocation) {
+		hashLocation = browserHashLocation()
+	}
+
 	var routes = []
 
-	var onHashChange = evaluateCurrentPath.bind(null, routes)
+	var onHashChange = evaluateCurrentPath.bind(null, routes, hashLocation)
 
-	window.addEventListener('hashchange', onHashChange)
+	hashLocation.on('hashchange', onHashChange)
 
 	function stop() {
-		window.removeEventListener('hashchange', onHashChange)
+		hashLocation.removeListener('hashchange', onHashChange)
 	}
 
 	return {
 		add: add.bind(null, routes),
 		stop: stop,
-		evaluateCurrent: evaluateCurrentPathOrGoToDefault.bind(null, routes),
+		evaluateCurrent: evaluateCurrentPathOrGoToDefault.bind(null, routes, hashLocation),
 		setDefault: setDefault.bind(null, routes),
-		replace: replace,
-		go: go
+		replace: hashLocation.replace,
+		go: hashLocation.go
 	}
 }
 
-function evaluateCurrentPath(routes) {
-	evaluatePath(routes, removeHashFromPath(location.hash))
-}
-
-function removeHashFromPath(path) {
-	return (path && path[0] === '#') ? path.substr(1) : path
+function evaluateCurrentPath(routes, hashLocation) {
+	evaluatePath(routes, hashLocation.get())
 }
 
 function getPathParts(path) {
@@ -84,11 +85,11 @@ function add(routes, routeString, routeFunction) {
 	routes.push(newRoute)
 }
 
-function evaluateCurrentPathOrGoToDefault(routes, defaultPath) {
-	if (removeHashFromPath(location.hash)) {
-		evaluateCurrentPath(routes)
+function evaluateCurrentPathOrGoToDefault(routes, hashLocation, defaultPath) {
+	if (hashLocation.get()) {
+		evaluateCurrentPath(routes, hashLocation)
 	} else {
-		location.hash = defaultPath
+		hashLocation.go(defaultPath)
 	}
 }
 
@@ -96,10 +97,3 @@ function setDefault(routes, defaultFn) {
 	routes.defaultFn = defaultFn
 }
 
-function replace(newPath) {
-	location.replace(location.origin + location.pathname + '#' + newPath)
-}
-
-function go(newPath) {
-	location.hash = newPath
-}

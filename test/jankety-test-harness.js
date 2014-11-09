@@ -1,5 +1,6 @@
 var domready = require('domready')
 var tapBrowserColor = require('tap-browser-color')
+var browserHashLocation = require('../hash-location.js')
 var test = require('tape').test
 
 var allTests = []
@@ -33,13 +34,14 @@ function runNext() {
 }
 
 function start() {
+	var hashLocation = browserHashLocation()
 	allTests.forEach(function(next) {
 		test(next.description, function(t) {
 			tapStarted = true
 			queuedUp.push(function() {
-				location.hash = ''
+				hashLocation.go('')
 				process.nextTick(function() {
-					next.fn(t, function() {
+					next.fn(t, hashLocation, function() {
 						t.end()
 						runNext()
 					})
