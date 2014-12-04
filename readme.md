@@ -1,7 +1,7 @@
 
 A router that is only concerned with single-page apps that want to change state based on the bits of the url after the hash.
 
-[![browser support](https://ci.testling.com/TehShrike/hash-brown-router.png)](https://ci.testling.com/TehShrike/hash-brown-router)
+[![Build Status](https://travis-ci.org/TehShrike/hash-brown-router.svg)](https://travis-ci.org/TehShrike/hash-brown-router)
 
 ## To use
 
