@@ -2,6 +2,7 @@ var pathToRegexp = require('path-to-regexp-with-reversible-keys')
 var qs = require('querystring')
 var xtend = require('xtend')
 var browserHashLocation = require('./hash-location.js')
+require('array.prototype.find')
 
 module.exports = function Router(hashLocation) {
 	if (!hashLocation) {
@@ -43,27 +44,15 @@ function getPathParts(path) {
 function evaluatePath(routes, path) {
 	var pathParts = getPathParts(path)
 	path = pathParts.path
-
-	var matchingRoute = routes.reduce(function(found, route) {
-		if (found) {
-			return found
-		} else {
-			var matchingRegex = route.exec(path)
-			if (matchingRegex) {
-				return {
-					regexResult: matchingRegex,
-					route: route
-				}
-			}
-		}
-	}, null)
-
 	var queryStringParameters = pathParts.queryString
 
+	var matchingRoute = routes.find("".match, path)
+
 	if (matchingRoute) {
-		var routeParameters = makeParametersObjectFromRegexResult(matchingRoute.route.keys, matchingRoute.regexResult)
+		var regexResult = matchingRoute.exec(path)
+		var routeParameters = makeParametersObjectFromRegexResult(matchingRoute.keys, regexResult)
 		var params = xtend(queryStringParameters, routeParameters)
-		matchingRoute.route.fn(params)
+		matchingRoute.fn(params)
 	} else if (routes.defaultFn) {
 		routes.defaultFn(path, queryStringParameters)
 	}

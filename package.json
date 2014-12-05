@@ -26,13 +26,13 @@
   "homepage": "https://github.com/TehShrike/hash-brown-router",
   "devDependencies": {
     "domready": "^1.0.7",
-    "path-to-regexp-with-reversible-keys": "^1.0.1",
     "tap-browser-color": "^0.1.2",
-    "tape": "^3.0.1",
-    "xtend": "^4.0.0"
+    "tape": "^3.0.1"
   },
   "dependencies": {
-    "path-to-regexp-with-reversible-keys": "^1.0.1"
+    "array.prototype.find": "^1.0.0",
+    "path-to-regexp-with-reversible-keys": "^1.0.1",
+    "xtend": "^4.0.0"
   },
   "testling": {
     "files": "test/test.js",
