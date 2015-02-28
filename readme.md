@@ -1,9 +1,17 @@
+# hash-brown-router
 
 A router that is only concerned with single-page apps that want to change state based on the bits of the url after the hash.
 
-[![Build Status](https://travis-ci.org/TehShrike/hash-brown-router.svg)](https://travis-ci.org/TehShrike/hash-brown-router)
+## Why another client-side routing library?
 
-## To use
+This library:
+
+1. uses a path-parsing library that lets you [generate links programmatically](https://github.com/tehshrike/page-path-builder#usage)
+2. comes with a handy stub for testing - any library that takes hash-brown-router can use the included [stub](#testability) in unit tests.
+
+# API
+
+## Construction
 
 	var makeRouter = require('hash-brown-router')
 
@@ -43,13 +51,16 @@ Forces the library to evaluate the current route from location.hash.  Probably b
 
 If location.hash is currently empty, it changes the path to the default path value you pass in.
 
-## Other
+## `stop()`
 
-### `stop()`
+If for some reason you want the router to start ignoring hash change events. you can call `router.stop()`.
 
-If for some reason you want the router to start ignoring hash change events. you can call `route.stop()`.
+# Testability
 
-License
-======
+Want to use a stub of this library that works in node?  Just `require('hash-brown-router/mock')` for all your automated testing needs.
+
+[![Build Status](https://travis-ci.org/TehShrike/hash-brown-router.svg)](https://travis-ci.org/TehShrike/hash-brown-router)
+
+# License
 
 [WTFPL](http://wtfpl2.com)
