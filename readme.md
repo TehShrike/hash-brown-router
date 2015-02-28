@@ -33,6 +33,12 @@ Parses [express-style](https://forbeslindesay.github.io/express-route-tester/) r
 
 Called whenever the hash route changes, but no other matching route is found.
 
+## `go(newPath)` - navigate to a new path
+
+	router.go('/some-other/path')
+
+Changes the current location hash.
+
 ## `replace(newPath)` - replace the current route in the browser history
 
 	router.add('/page/:pageName', function(parameters) {
@@ -41,7 +47,7 @@ Called whenever the hash route changes, but no other matching route is found.
 		}
 	})
 
-Convenience method for `location.replace(location.origin + location.pathname + '#' + newPath)`.
+Changes the current location hash, replacing the last location in the browser history, i.e. `location.replace(location.origin + location.pathname + '#' + newPath)`.
 
 ## `evaluateCurrent(defaultPath)` - evaluate the current url
 
