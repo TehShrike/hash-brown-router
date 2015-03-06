@@ -6,7 +6,7 @@ require('array.prototype.find')
 
 module.exports = function Router(hashLocation) {
 	if (!hashLocation) {
-		hashLocation = browserHashLocation()
+		hashLocation = browserHashLocation(window)
 	}
 
 	var routes = []

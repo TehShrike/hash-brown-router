@@ -34,7 +34,7 @@ function runNext() {
 }
 
 function start() {
-	var hashLocation = browserHashLocation()
+	var hashLocation = browserHashLocation(window)
 	allTests.forEach(function(next) {
 		test(next.description, function(t) {
 			tapStarted = true

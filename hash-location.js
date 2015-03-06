@@ -1,6 +1,6 @@
 var EventEmitter = require('events').EventEmitter
 
-module.exports = function HashLocation() {
+module.exports = function HashLocation(window) {
 	var emitter = new EventEmitter()
 	var last = ''
 
@@ -11,23 +11,23 @@ module.exports = function HashLocation() {
 		}
 	})
 
-	emitter.go = go
-	emitter.replace = replace
-	emitter.get = get
+	emitter.go = go.bind(null, window)
+	emitter.replace = replace.bind(null, window)
+	emitter.get = get.bind(null, window)
 
 	return emitter
 }
 
-function replace(newPath) {
-	location.replace(location.origin + location.pathname + '#' + newPath)
+function replace(window, newPath) {
+	window.location.replace(window.location.origin + window.location.pathname + '#' + newPath)
 }
 
-function go(newPath) {
-	location.hash = newPath
+function go(window, newPath) {
+	window.location.hash = newPath
 }
 
-function get() {
-	return removeHashFromPath(location.hash)
+function get(window) {
+	return removeHashFromPath(window.location.hash)
 }
 
 function removeHashFromPath(path) {
