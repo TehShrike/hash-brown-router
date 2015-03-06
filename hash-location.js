@@ -2,12 +2,14 @@ var EventEmitter = require('events').EventEmitter
 
 module.exports = function HashLocation() {
 	var emitter = new EventEmitter()
+	var last = ''
 
-	function onHashChange() {
-		emitter.emit('hashchange')
-	}
-
-	window.addEventListener('hashchange', onHashChange)
+	window.addEventListener('hashchange', function() {
+		if (last !== emitter.get()) {
+			last = emitter.get()
+			emitter.emit('hashchange')
+		}
+	})
 
 	emitter.go = go
 	emitter.replace = replace

@@ -138,7 +138,7 @@ module.exports = function tests(tester) {
 
 	})
 
-	tester.add('parmeters include values from querystring', function(t, locationHash, done) {
+	tester.add('parameters include values from querystring', function(t, locationHash, done) {
 		t.plan(4)
 
 		var route = router(locationHash)
