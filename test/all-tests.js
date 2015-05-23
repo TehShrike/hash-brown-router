@@ -250,4 +250,24 @@ module.exports = function tests(locationHash) {
 
 		route.go('/initial')
 	})
+
+	test('by default, routes are evaluated oldest-to-newest', function(t) {
+		var route = getRoute()
+
+		t.timeoutAfter(500)
+
+		route.add('/route/:oneThing', function() {
+			t.pass('the first route was called')
+			route.stop()
+			t.end()
+		})
+
+		route.add('/route/:anotherThing', function() {
+			t.fail()
+		})
+
+		setTimeout(function() {
+			locationHash.go('/route/butts')
+		})
+	})
 }
