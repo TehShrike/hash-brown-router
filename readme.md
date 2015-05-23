@@ -16,10 +16,17 @@ This library:
 ```js
 var makeRouter = require('hash-brown-router')
 
-var router = makeRouter()
+var router = makeRouter(options)
 ```
 
-## `add(routeString, cb)` - add routes
+`options`: an object with one possible option, "reverse", which defaults to false.
+
+If the reverse option is false, routes are matched from oldest to newest - if there are multiple matching routes for the current url, the first one that was added is used.
+
+If reverse is set to true, the most recently added match is used.
+
+
+## `router.add(routeString, cb)` - add routes
 
 ```js
 router.add('/page/:pageName', function(parameters) {
@@ -29,7 +36,7 @@ router.add('/page/:pageName', function(parameters) {
 
 Parses [express-style](https://forbeslindesay.github.io/express-route-tester/) route paths, using a fork of [path-to-regexp](https://github.com/pillarjs/path-to-regexp).
 
-## `setDefault(cb)` - set a default/404 route
+## `router.setDefault(cb)` - set a default/404 route
 
 ```js
 router.setDefault(function(path, parameters) {
@@ -39,7 +46,7 @@ router.setDefault(function(path, parameters) {
 
 Called whenever the hash route changes, but no other matching route is found.
 
-## `go(newPath)` - navigate to a new path
+## `router.go(newPath)` - navigate to a new path
 
 ```js
 router.go('/some-other/path')
@@ -47,7 +54,7 @@ router.go('/some-other/path')
 
 Changes the current location hash.
 
-## `replace(newPath)` - replace the current route in the browser history
+## `router.replace(newPath)` - replace the current route in the browser history
 
 ```js
 router.add('/page/:pageName', function(parameters) {
@@ -59,7 +66,7 @@ router.add('/page/:pageName', function(parameters) {
 
 Changes the current location hash, replacing the last location in the browser history, i.e. `location.replace(location.origin + location.pathname + '#' + newPath)`.
 
-## `evaluateCurrent(defaultPath)` - evaluate the current url
+## `router.evaluateCurrent(defaultPath)` - evaluate the current url
 
 Forces the library to evaluate the current route from location.hash.  Probably best do do once the [dom is ready](https://www.npmjs.org/package/domready).
 
@@ -69,7 +76,7 @@ router.evaluateCurrent('/home')
 
 If location.hash is currently empty, it changes the path to the default path value you pass in.
 
-## `stop()`
+## `router.stop()`
 
 If for some reason you want the router to start ignoring hash change events. you can call `router.stop()`.
 

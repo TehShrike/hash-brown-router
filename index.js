@@ -4,14 +4,21 @@ var xtend = require('xtend')
 var browserHashLocation = require('./hash-location.js')
 require('array.prototype.find')
 
-module.exports = function Router(hashLocation) {
+module.exports = function Router(opts, hashLocation) {
+	if (isHashLocation(opts)) {
+		hashLocation = opts
+		opts = null
+	}
+
+	opts = opts || {}
+
 	if (!hashLocation) {
 		hashLocation = browserHashLocation(window)
 	}
 
 	var routes = []
 
-	var onHashChange = evaluateCurrentPath.bind(null, routes, hashLocation)
+	var onHashChange = evaluateCurrentPath.bind(null, routes, hashLocation, !!opts.reverse)
 
 	hashLocation.on('hashchange', onHashChange)
 
@@ -29,8 +36,8 @@ module.exports = function Router(hashLocation) {
 	}
 }
 
-function evaluateCurrentPath(routes, hashLocation) {
-	evaluatePath(routes, hashLocation.get())
+function evaluateCurrentPath(routes, hashLocation, reverse) {
+	evaluatePath(routes, hashLocation.get(), reverse)
 }
 
 function getPathParts(path) {
@@ -41,12 +48,12 @@ function getPathParts(path) {
 	}
 }
 
-function evaluatePath(routes, path) {
+function evaluatePath(routes, path, reverse) {
 	var pathParts = getPathParts(path)
 	path = pathParts.path
 	var queryStringParameters = pathParts.queryString
 
-	var matchingRoute = routes.find("".match, path)
+	var matchingRoute = (reverse ? reverseArray(routes) : routes).find("".match, path)
 
 	if (matchingRoute) {
 		var regexResult = matchingRoute.exec(path)
@@ -56,6 +63,10 @@ function evaluatePath(routes, path) {
 	} else if (routes.defaultFn) {
 		routes.defaultFn(path, queryStringParameters)
 	}
+}
+
+function reverseArray(ary) {
+	return ary.slice().reverse()
 }
 
 function makeParametersObjectFromRegexResult(keys, regexResult) {
@@ -86,3 +97,6 @@ function setDefault(routes, defaultFn) {
 	routes.defaultFn = defaultFn
 }
 
+function isHashLocation(hashLocation) {
+	return hashLocation && hashLocation.go && hashLocation.replace && hashLocation.on
+}

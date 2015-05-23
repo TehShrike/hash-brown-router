@@ -263,11 +263,34 @@ module.exports = function tests(locationHash) {
 		})
 
 		route.add('/route/:anotherThing', function() {
-			t.fail()
+			t.fail('the second route was called')
 		})
 
 		setTimeout(function() {
 			locationHash.go('/route/butts')
+		}, 50)
+	})
+
+	test('routes can be evaluated newest-to-oldest', function(t) {
+		locationHash.go('')
+		var route = router({ reverse: true }, locationHash)
+
+		t.timeoutAfter(500)
+
+		route.add('/route/:oneThing', function() {
+			t.fail('the first route was called')
+			route.stop()
+			t.end()
 		})
+
+		route.add('/route/:anotherThing', function() {
+			t.pass('the second route was called')
+			route.stop()
+			t.end()
+		})
+
+		setTimeout(function() {
+			locationHash.go('/route/butts')
+		}, 50)
 	})
 }
