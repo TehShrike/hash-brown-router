@@ -8,7 +8,7 @@ module.exports = function tests(locationHash) {
 	}
 	test('routing on a simple url', function(t) {
 		var route = getRoute()
-		t.timeoutAfter(300)
+		t.timeoutAfter(2000)
 
 		route.add('/non-butts', function() {
 			t.fail('the wrong route was called')
@@ -28,13 +28,13 @@ module.exports = function tests(locationHash) {
 
 		setTimeout(function() {
 			route.stop()
-		}, 200)
+		}, 500)
 	})
 
 	test('default function is called when nothing matches', function(t) {
 		var route = getRoute()
 
-		t.timeoutAfter(300)
+		t.timeoutAfter(2000)
 
 		var fail = t.fail.bind(t, 'the wrong route was called')
 
@@ -52,7 +52,7 @@ module.exports = function tests(locationHash) {
 
 		setTimeout(function() {
 			route.stop()
-		}, 200)
+		}, 500)
 	})
 
 	test('evaluating the current path instead of waiting for an onhashchange', function(t) {
@@ -81,13 +81,13 @@ module.exports = function tests(locationHash) {
 			route.stop()
 
 			t.end()
-		}, 200)
+		}, 500)
 	})
 
 	test('matching an express-style url, getting parameters back', function(t) {
 		var route = getRoute()
 
-		t.timeoutAfter(300)
+		t.timeoutAfter(2000)
 
 		route.add('/no/way', t.fail.bind(t, 'the wrong route was called'))
 
@@ -103,13 +103,13 @@ module.exports = function tests(locationHash) {
 
 		setTimeout(function() {
 			route.stop()
-		}, 200)
+		}, 500)
 	})
 
 	test('route.evaluateCurrent calls the default route when the current path is empty', function(t) {
 		var route = getRoute()
 
-		t.timeoutAfter(300)
+		t.timeoutAfter(2000)
 
 		route.add('/default', function() {
 			t.pass('the default route was called')
@@ -124,13 +124,13 @@ module.exports = function tests(locationHash) {
 
 		setTimeout(function() {
 			route.stop()
-		}, 200)
+		}, 500)
 	})
 
 	test('route.evaluateCurrent does not call the default route when the current path is not empty', function(t) {
 		var route = getRoute()
 
-		t.timeoutAfter(400)
+		t.timeoutAfter(2000)
 
 		locationHash.go('/starting-path')
 
@@ -146,7 +146,7 @@ module.exports = function tests(locationHash) {
 
 			setTimeout(function() {
 				route.stop()
-			}, 200)
+			}, 500)
 
 		}, 100)
 
@@ -154,7 +154,7 @@ module.exports = function tests(locationHash) {
 
 	test('parameters include values from querystring', function(t) {
 		var route = getRoute()
-		t.timeoutAfter(300)
+		t.timeoutAfter(2000)
 
 		route.add('myroute/:fromUrl', function(parameters) {
 			t.equal(typeof parameters, 'object', 'parameters object is an object')
@@ -170,13 +170,13 @@ module.exports = function tests(locationHash) {
 
 		setTimeout(function() {
 			route.stop()
-		}, 200)
+		}, 500)
 	})
 
 	test('parameters from route overwrite querystring parameters', function(t) {
 		var route = getRoute()
 
-		t.timeoutAfter(300)
+		t.timeoutAfter(2000)
 
 		route.add('myroute/:fromUrl', function(parameters) {
 			t.equal(typeof parameters, 'object', 'parameters object is an object')
@@ -190,13 +190,13 @@ module.exports = function tests(locationHash) {
 
 		setTimeout(function() {
 			route.stop()
-		}, 200)
+		}, 500)
 	})
 
 	test('querystring parameters passed to the default route', function(t) {
 		var route = getRoute()
 
-		t.timeoutAfter(300)
+		t.timeoutAfter(2000)
 
 		route.setDefault(function(path, parameters) {
 			t.equal(typeof parameters, 'object', 'parameters object is an object')
@@ -211,7 +211,7 @@ module.exports = function tests(locationHash) {
 
 		setTimeout(function() {
 			route.stop()
-		}, 200)
+		}, 500)
 	})
 
 	test('replacing a url', function(t) {
@@ -254,7 +254,7 @@ module.exports = function tests(locationHash) {
 	test('by default, routes are evaluated oldest-to-newest', function(t) {
 		var route = getRoute()
 
-		t.timeoutAfter(500)
+		t.timeoutAfter(2000)
 
 		route.add('/route/:oneThing', function() {
 			t.pass('the first route was called')
@@ -275,7 +275,7 @@ module.exports = function tests(locationHash) {
 		locationHash.go('')
 		var route = router({ reverse: true }, locationHash)
 
-		t.timeoutAfter(500)
+		t.timeoutAfter(2000)
 
 		route.add('/route/:oneThing', function() {
 			t.fail('the first route was called')
