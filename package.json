@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "node test/automated-test.js",
-    "browserwatch": "watchify test/browser-test.js -o test/build.js -d"
+    "browserwatch": "watchify test/browser-test.js -o test/build.js -d",
+    "browsertest": "browserify test/browser-test.js -o browser-test.js -d"
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,7 @@
   },
   "homepage": "https://github.com/TehShrike/hash-brown-router",
   "devDependencies": {
+    "browserify": "^11.0.0",
     "domready": "^1.0.8",
     "tap-browser-color": "^0.1.2",
     "tape": "^4.0.0"
