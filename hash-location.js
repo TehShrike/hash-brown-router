@@ -19,7 +19,12 @@ module.exports = function HashLocation(window) {
 }
 
 function replace(window, newPath) {
-	window.location.replace(window.location.origin + window.location.pathname + '#' + newPath)
+	window.location.replace(everythingBeforeTheSlash(window.location.href) + '#' + newPath)
+}
+
+function everythingBeforeTheSlash(url) {
+	var hashIndex = url.indexOf('#')
+	return hashIndex === -1 ? url : url.substring(0, hashIndex)
 }
 
 function go(window, newPath) {
