@@ -46,25 +46,31 @@ router.setDefault(function(path, parameters) {
 
 Called whenever the hash route changes, but no other matching route is found.
 
-## `router.go(newPath)` - navigate to a new path
+## `router.location.go(newPath)` - navigate to a new path
 
 ```js
-router.go('/some-other/path')
+router.location.go('/some-other/path')
 ```
 
 Changes the current location hash.
 
-## `router.replace(newPath)` - replace the current route in the browser history
+## `router.location.replace(newPath)` - replace the current route in the browser history
 
 ```js
 router.add('/page/:pageName', function(parameters) {
 	if (doesNotExistInTheDatabase(parameters.pageName)) {
-		router.replace('/pageNotFound')
+		router.location.replace('/pageNotFound')
 	}
 })
 ```
 
 Changes the current location hash, replacing the last location in the browser history, i.e. `location.replace(location.origin + location.pathname + '#' + newPath)`.
+
+## `router.location.get()` - get the current path, without a leading hash
+
+```js
+router.location.get() // => '/page/home'
+```
 
 ## `router.evaluateCurrent(defaultPath)` - evaluate the current url
 

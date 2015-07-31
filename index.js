@@ -32,7 +32,8 @@ module.exports = function Router(opts, hashLocation) {
 		evaluateCurrent: evaluateCurrentPathOrGoToDefault.bind(null, routes, hashLocation),
 		setDefault: setDefault.bind(null, routes),
 		replace: hashLocation.replace,
-		go: hashLocation.go
+		go: hashLocation.go,
+		location: hashLocation
 	}
 }
 
