@@ -1,5 +1,10 @@
 language: node_js
 node_js:
-  - "0.12"
-  - "0.10"
-  - iojs
+- '0.12'
+- '0.10'
+- iojs
+env:
+  matrix:
+  - secure: ole64AHwCmIsoXK3Y5vLHKQdhBwocx/sd7Cc02M0NDjlcAaIoHxEml+yFrKscNxH1QwU43yvPwmZxhSmH0QNdcJpeW4vnJOOF+yXBHD+/ixe0mjttHR/pK+woIOJ3JKCCD5UU+Yc8LJNKUErR3i8YYCMj/rrKVZRdu6Usn6yRFA=
+  - secure: bB2hgiyeThR7oJRSxXm5Q5u7pxfcrJpuD+C4IldHEKw1YikesiZ4fjYvUO3+6q1D8eNSUTsj7QFdzx4E1GzHsaFv7icOcSvijIAjS3UDf9pT8ILaegUGyUHo0j28iCpPfFR7YKgEYdC0aRJ5mGPwVdovtxd1mUDqpXOOaGIoEUg=
+  - secure: m3Zwups+6vbChw7j14dmvNwOn5liHrmPmQW36yMbA8V9fci2/umRiWQ5c+q6vzmVoZ/9VQiLoLYbuwFcTsFweRK6p9yovEvEVuVxkPqpjPpHVdW6DqJYml6WvVWpV93PN9YYCbEZ8Bs8anlWuD42SWhxZtAKq2ewqUFs3dt6Yls=

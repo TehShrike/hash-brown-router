@@ -4,9 +4,11 @@
   "description": "A client-side router that only cares about the bits after the #",
   "main": "index.js",
   "scripts": {
-    "test": "node test/automated-test.js",
-    "browserwatch": "watchify test/browser-test.js -o test/build.js -d",
-    "browsertest": "browserify test/browser-test.js -o browser-test.js -d"
+    "test": "npm run localtest && npm run browserstack",
+    "localtest": "node test/automated-test.js",
+    "browserwatch": "watchify test/browser-test.js node_modules/browserstack-tape-reporter/index.js -o browser-test.js -d",
+    "browsertest": "browserify test/browser-test.js node_modules/browserstack-tape-reporter/index.js -o browser-test.js -d",
+    "browserstack": "browserstack-runner"
   },
   "repository": {
     "type": "git",
@@ -27,9 +29,10 @@
   "homepage": "https://github.com/TehShrike/hash-brown-router",
   "devDependencies": {
     "browserify": "^11.0.0",
-    "domready": "^1.0.8",
+    "browserstack-runner-tehshrike": "0.4.0",
+    "browserstack-tape-reporter": "1.0.0",
     "tap-browser-color": "^0.1.2",
-    "tape": "^4.0.0"
+    "tape": "^4.1.0"
   },
   "dependencies": {
     "array.prototype.find": "^1.0.0",
