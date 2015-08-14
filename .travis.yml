@@ -2,6 +2,6 @@ language: node_js
 node_js:
 - '0.12'
 env:
-  matrix:
+  global:
   - secure: jDL9IliiPzjd/D3ag9ThrW6NA+i1KleH4H8ZsVYcRyNNYbHs6A64juevQD6JbbIr7W+Hnzg0HV1Y2OzpYotH/lCTeBQuljB5J1lRSvOQa3V0FGlWJMMDEMwgujjaMJtwH4iDWMmqUWb+1jnS5P0oR3yFS4/VGQKaY0kmbQvdfh4=
   - secure: g4rMG6k36oh1KsmIn9Fh6USX+WuYT8VEEu60xF8qh/2XJmggsj0LFmeqfpvZ+uNI5aU7ZO6ASgwAkvkLl+oEeW9Qj6Ir87534QoweySOjKiqDAPDo4Ssn1Iu5fD6/UJdSjvRpTqR5Io9juI2yWuay8ZlCcRdVgeQdRfDHXKdfu0=
