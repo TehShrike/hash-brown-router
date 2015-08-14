@@ -1,8 +1,6 @@
 language: node_js
 node_js:
 - '0.12'
-- '0.10'
-- iojs
 env:
   matrix:
   - secure: ole64AHwCmIsoXK3Y5vLHKQdhBwocx/sd7Cc02M0NDjlcAaIoHxEml+yFrKscNxH1QwU43yvPwmZxhSmH0QNdcJpeW4vnJOOF+yXBHD+/ixe0mjttHR/pK+woIOJ3JKCCD5UU+Yc8LJNKUErR3i8YYCMj/rrKVZRdu6Usn6yRFA=
