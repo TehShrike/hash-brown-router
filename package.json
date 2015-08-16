@@ -4,10 +4,10 @@
   "description": "A client-side router that only cares about the bits after the #",
   "main": "index.js",
   "scripts": {
-    "test": "npm run localtest && npm run browserstack",
+    "test": "npm run localtest && npm run browserstackbuild && browserstack-runner",
     "localtest": "node test/automated-test.js",
-    "browserwatch": "watchify test/browser-test.js node_modules/browserstack-tape-reporter/index.js -o browser-test.js -d",
-    "browsertest": "browserify test/browser-test.js node_modules/browserstack-tape-reporter/index.js -o browser-test.js -d",
+    "watch": "watchify test/browser-test.js -o browser-test.js -d",
+    "browserstackbuild": "browserify test/browser-test.js node_modules/browserstack-tape-reporter/index.js -o browser-test.js -d",
     "browserstack": "browserstack-runner"
   },
   "repository": {
