@@ -4,7 +4,7 @@
   "description": "A client-side router that only cares about the bits after the #",
   "main": "index.js",
   "scripts": {
-    "test": "npm run localtest",
+    "test": "npm run localtest && npm run browserstack",
     "localtest": "node test/automated-test.js",
     "watch": "watchify test/browser-test.js -o browser-test.js -d",
     "browserstackbuild": "browserify test/browser-test.js node_modules/browserstack-tape-reporter/index.js -o browser-test.js -d",
