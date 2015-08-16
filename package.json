@@ -29,8 +29,8 @@
   "homepage": "https://github.com/TehShrike/hash-brown-router",
   "devDependencies": {
     "browserify": "^11.0.0",
-    "browserstack-runner-tehshrike": "0.4.0",
-    "browserstack-tape-reporter": "1.0.0",
+    "browserstack-runner-tehshrike": "~0.4.0",
+    "browserstack-tape-reporter": "~1.0.0",
     "tap-browser-color": "^0.1.2",
     "tape": "^4.1.0"
   },
