@@ -38,18 +38,5 @@
     "array.prototype.find": "^1.0.0",
     "path-to-regexp-with-reversible-keys": "^1.0.3",
     "xtend": "^4.0.0"
-  },
-  "testling": {
-    "files": "test/test.js",
-    "browsers": [
-      "ie/6..latest",
-      "chrome/22..latest",
-      "firefox/16..latest",
-      "safari/latest",
-      "opera/11.0..latest",
-      "iphone/6..latest",
-      "ipad/6..latest",
-      "android-browser/latest"
-    ]
   }
 }
