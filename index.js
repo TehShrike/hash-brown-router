@@ -88,7 +88,11 @@ function add(routes, routeString, routeFunction) {
 
 function evaluateCurrentPathOrGoToDefault(routes, hashLocation, defaultPath) {
 	if (hashLocation.get()) {
-		evaluateCurrentPath(routes, hashLocation)
+		var routesCopy = routes.slice()
+		routesCopy.defaultFn = function() {
+			hashLocation.go(defaultPath)
+		}
+		evaluateCurrentPath(routesCopy, hashLocation)
 	} else {
 		hashLocation.go(defaultPath)
 	}

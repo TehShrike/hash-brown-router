@@ -156,7 +156,7 @@ module.exports = function tests(locationHash) {
 		var route = getRoute()
 		t.timeoutAfter(2000)
 
-		route.add('myroute/:fromUrl', function(parameters) {
+		route.add('/myroute/:fromUrl', function(parameters) {
 			t.equal(typeof parameters, 'object', 'parameters object is an object')
 			t.equal(Object.keys(parameters).length, 2, 'parameters object has two properties')
 			t.equal(parameters.fromUrl, 'value1', 'Value from the url parameter is correct')
@@ -165,7 +165,7 @@ module.exports = function tests(locationHash) {
 			t.end()
 		})
 
-		locationHash.go('myroute/value1?fromQueryString=value2')
+		locationHash.go('/myroute/value1?fromQueryString=value2')
 
 
 		setTimeout(function() {
@@ -178,7 +178,7 @@ module.exports = function tests(locationHash) {
 
 		t.timeoutAfter(2000)
 
-		route.add('myroute/:fromUrl', function(parameters) {
+		route.add('/myroute/:fromUrl', function(parameters) {
 			t.equal(typeof parameters, 'object', 'parameters object is an object')
 			t.equal(Object.keys(parameters).length, 1, 'parameters object has one property')
 			t.equal(parameters.fromUrl, 'value1', 'Value is from the route parameter')
@@ -186,7 +186,7 @@ module.exports = function tests(locationHash) {
 			t.end()
 		})
 
-		locationHash.go('myroute/value1?fromUrl=value2')
+		locationHash.go('/myroute/value1?fromUrl=value2')
 
 		setTimeout(function() {
 			route.stop()
