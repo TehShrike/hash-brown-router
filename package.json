@@ -8,7 +8,7 @@
     "localtest": "node test/automated-test.js",
     "watch": "watchify test/browser-test.js -o browser-test.js -d",
     "browserstackbuild": "browserify test/browser-test.js node_modules/browserstack-tape-reporter/index.js -o browser-test.js -d",
-    "browserstack": "npm run browserstackbuild && browserstack-runner"
+    "browserstack": "npm run browserstackbuild && browserstack-runner --verbose"
   },
   "repository": {
     "type": "git",
