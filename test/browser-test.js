@@ -4,6 +4,6 @@ var browserHashLocation = require('../hash-location.js')
 
 var hashLocation = browserHashLocation(window)
 
-allTests(hashLocation)
+allTests(hashLocation, 1000)
 
 // tapBrowserColor()
