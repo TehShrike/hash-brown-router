@@ -1,5 +1,6 @@
 {
 	"test_path": [ "index.html" ],
+	"timeout": 600,
 	"browsers": [
 		"chrome_latest",
 		"firefox_latest",
@@ -7,6 +8,15 @@
 		"chrome_latest",
 		"ie_9",
 		"ie_10",
-		"ie_11"
+		"ie_11",
+		{
+			"os": "ios",
+			"os_version": "7.0",
+			"device": "iPhone 5S"
+		},
+		{
+			"os": "android",
+			"os_version": "4.4"
+		}
 	]
 }
