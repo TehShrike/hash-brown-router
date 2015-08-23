@@ -6,4 +6,4 @@ var hashLocation = browserHashLocation(window)
 
 allTests(hashLocation, 1000)
 
-// tapBrowserColor()
+tapBrowserColor()
