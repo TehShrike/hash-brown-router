@@ -90,7 +90,11 @@ If for some reason you want the router to start ignoring hash change events. you
 
 Want to use a stub of this library that works in node?  Just `require('hash-brown-router/mock')` for all your automated testing needs.
 
+# Browser support
+
 [![Build Status](https://travis-ci.org/TehShrike/hash-brown-router.svg)](https://travis-ci.org/TehShrike/hash-brown-router)
+
+Automated testing in Chrome, Firefox, Safari, and IE9+ provided by [Browserstack](https://www.browserstack.com/).
 
 # License
 
