@@ -32,7 +32,8 @@
     "browserstack-runner": "0.3.7",
     "browserstack-tape-reporter": "~1.0.0",
     "tap-browser-color": "^0.1.2",
-    "tape": "^4.1.0"
+    "tape": "^4.1.0",
+    "tape-catch": "1.0.4"
   },
   "dependencies": {
     "array.prototype.find": "^1.0.0",

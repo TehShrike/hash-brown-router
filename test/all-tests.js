@@ -1,5 +1,5 @@
 var makeRouter = require('../')
-var test = require('tape')
+var test = require('tape-catch')
 
 module.exports = function tests(locationHash, delayAfterInitialRouteChange) {
 	function getRoute(cb, options) {
