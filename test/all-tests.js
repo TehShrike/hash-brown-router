@@ -270,4 +270,28 @@ module.exports = function tests(locationHash, delayAfterInitialRouteChange) {
 
 		t.timeoutAfter(4000)
 	})
+
+	test('encoding in hash fragment', function(t) {
+		getRoute(function(route) {
+
+			route.add('/route/:oneThing', function(parameters) {
+				t.equal(parameters.oneThing, 'thing with spaces')
+				route.stop()
+				t.end()
+			})
+
+			route.add('/other-route/:anotherThing', function() {
+				t.fail('the second route was called')
+				route.stop()
+				t.end()
+			})
+
+			setTimeout(function() {
+				locationHash.go('/route/thing with spaces')
+			}, 50)
+
+		}, { reverse: true })
+
+		t.timeoutAfter(4000)
+	})
 }
