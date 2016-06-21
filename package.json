@@ -4,11 +4,12 @@
   "description": "A client-side router that only cares about the bits after the #",
   "main": "index.js",
   "scripts": {
-    "test": "npm run localtest && npm run browserstack",
+    "test": "npm run localtest && npm run browser",
     "localtest": "node test/automated-test.js",
     "watch": "watchify test/browser-test.js -o browser-test.js -d",
     "browserstackbuild": "browserify test/browser-test.js node_modules/browserstack-tape-reporter/index.js -o browser-test.js -d",
-    "browserstack": "npm run browserstackbuild && browserstack-runner"
+    "browserstack": "npm run browserstackbuild && browserstack-runner",
+    "browser": "browserify test/browser-test.js | tape-run"
   },
   "repository": {
     "type": "git",
@@ -33,7 +34,8 @@
     "browserstack-tape-reporter": "~1.0.0",
     "tap-browser-color": "^0.1.2",
     "tape": "^4.1.0",
-    "tape-catch": "1.0.4"
+    "tape-catch": "1.0.4",
+    "tape-run": "2.1.4"
   },
   "dependencies": {
     "array.prototype.find": "^1.0.0",
