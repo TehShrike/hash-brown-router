@@ -1,8 +1,12 @@
 language: node_js
 node_js:
-- iojs
+- 6.0
 sudo: false
 env:
   global:
   - secure: pfieOW4daokJkAi78lQ2JutPH7dk0C2dqiq1+mlnN7dXhNQ2NvbU2uxBUfMuffaOWcQhjb9G2qQnD8TyFMVQOsNQ0b5zTyIFu+uZaB5Uw0NXOOVZJLCZYZpvJHEf16qItv796EMHzbi15UYCE6TXD/Mu5FHbUDZ6+rceyJIRlYk=
   - secure: ItSYcqRu4mU5GTIpa/oGFpM4ZYVQU4gtlrzSzkCeOWJPbit1ltqvhIAp/o/xXCaknYZpDrYMZRLuSv8HQYBxULucsX4AyfUyOXaZhyvsSrnkgIZI4NquW4neOiCZmMDxnRbkiYW15n3SZFYw19D16Bsp0Wdw1TXSZ04LN7OIBUg=
+before_script:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+  - sleep 3 # give xvfb some time to start
