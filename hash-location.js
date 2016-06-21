@@ -3,6 +3,7 @@ var EventEmitter = require('events').EventEmitter
 module.exports = function HashLocation(window) {
 	var emitter = new EventEmitter()
 	var last = ''
+	var needToDecode = getNeedToDecode()
 
 	window.addEventListener('hashchange', function() {
 		if (last !== emitter.get()) {
@@ -13,7 +14,7 @@ module.exports = function HashLocation(window) {
 
 	emitter.go = go.bind(null, window)
 	emitter.replace = replace.bind(null, window)
-	emitter.get = get.bind(null, window)
+	emitter.get = get.bind(null, window, needToDecode)
 
 	return emitter
 }
@@ -31,10 +32,17 @@ function go(window, newPath) {
 	window.location.hash = newPath
 }
 
-function get(window) {
-	return removeHashFromPath(window.location.hash)
+function get(window, needToDecode) {
+	var hash = removeHashFromPath(window.location.hash)
+	return needToDecode ? decodeURI(hash) : hash
 }
 
 function removeHashFromPath(path) {
 	return (path && path[0] === '#') ? path.substr(1) : path
+}
+
+function getNeedToDecode() {
+	var a = document.createElement('a')
+	a.href = '#x x'
+	return !/x x/.test(a.hash)
 }
