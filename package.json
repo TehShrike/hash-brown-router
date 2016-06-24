@@ -1,6 +1,6 @@
 {
   "name": "hash-brown-router",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "description": "A client-side router that only cares about the bits after the #",
   "main": "index.js",
   "scripts": {
