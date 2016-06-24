@@ -294,4 +294,30 @@ module.exports = function tests(locationHash, delayAfterInitialRouteChange) {
 
 		t.timeoutAfter(4000)
 	})
+
+	test('reverse order is respected for evaluateCurrent()', function(t) {
+		// https://github.com/TehShrike/hash-brown-router/issues/8
+		getRoute(function(route) {
+			locationHash.go('/route/butts')
+
+			route.add('/route/:oneThing', function() {
+				t.fail('the first route was called')
+				route.stop()
+				t.end()
+			})
+
+			route.add('/route/:anotherThing', function() {
+				t.pass('the second route was called')
+				route.stop()
+				t.end()
+			})
+
+			setTimeout(function() {
+				route.evaluateCurrent('/wat')
+			}, 50)
+
+		}, { reverse: true })
+
+		t.timeoutAfter(4000)
+	})
 }

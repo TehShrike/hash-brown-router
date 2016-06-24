@@ -29,7 +29,7 @@ module.exports = function Router(opts, hashLocation) {
 	return {
 		add: add.bind(null, routes),
 		stop: stop,
-		evaluateCurrent: evaluateCurrentPathOrGoToDefault.bind(null, routes, hashLocation),
+		evaluateCurrent: evaluateCurrentPathOrGoToDefault.bind(null, routes, hashLocation, !!opts.reverse),
 		setDefault: setDefault.bind(null, routes),
 		replace: hashLocation.replace,
 		go: hashLocation.go,
@@ -86,13 +86,13 @@ function add(routes, routeString, routeFunction) {
 	routes.push(newRoute)
 }
 
-function evaluateCurrentPathOrGoToDefault(routes, hashLocation, defaultPath) {
+function evaluateCurrentPathOrGoToDefault(routes, hashLocation, reverse, defaultPath) {
 	if (hashLocation.get()) {
 		var routesCopy = routes.slice()
 		routesCopy.defaultFn = function() {
 			hashLocation.go(defaultPath)
 		}
-		evaluateCurrentPath(routesCopy, hashLocation)
+		evaluateCurrentPath(routesCopy, hashLocation, reverse)
 	} else {
 		hashLocation.go(defaultPath)
 	}
