@@ -3,7 +3,8 @@ var qs = require('querystring')
 var xtend = require('xtend')
 var browserHashLocation = require('./hash-location.js')
 require('array.prototype.find')
-var noop = require('noop2')
+
+function noop() {}
 
 module.exports = function Router(opts, hashLocation) {
 	if (isHashLocation(opts)) {
