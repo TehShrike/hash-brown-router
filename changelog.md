@@ -1,6 +1,6 @@
 # 2.0.0
 
-- removed setDefault, added an onNotFound property to options.  Pull request [#12](https://github.com/TehShrike/hash-brown-router/pull/12)
+- removed `setDefault`, added an `onNotFound` property to options.  Pull request [#12](https://github.com/TehShrike/hash-brown-router/pull/12)
 
 # 1.5.3
 
