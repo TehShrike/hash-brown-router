@@ -21,7 +21,7 @@ var router = makeRouter(options)
 
 - `options`: an object of options
 	- `reverse`: By default, routes are matched from oldest to newest. So if there are multiple matching routes for the current url, the first one that was added is used.  If `reverse` is set to `true`, then the most recently added match is used.
-	- `onNotFound`: a function that will be called whenever a route change happens and there is no route handler.  It is passed two arguments: the path (a string) and the parameters (an object).
+	- `onNotFound`: a function that will be called whenever the route is evaluated and there is no matching handler for that route.  It is passed two arguments: the path (a string) and the parameters (an object).
 
 ## `router.add(routeString, cb)` - add routes
 
