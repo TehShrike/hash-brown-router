@@ -3,12 +3,14 @@ var qs = require('querystring')
 var xtend = require('xtend')
 var browserHashLocation = require('./hash-location.js')
 require('array.prototype.find')
+var noop = require('noop2')
 
 module.exports = function Router(opts, hashLocation) {
 	if (isHashLocation(opts)) {
 		hashLocation = opts
 		opts = null
 	}
+	var onNotFound = (opts && opts.onNotFound) || noop
 
 	opts = opts || {}
 
@@ -18,7 +20,7 @@ module.exports = function Router(opts, hashLocation) {
 
 	var routes = []
 
-	var onHashChange = evaluateCurrentPath.bind(null, routes, hashLocation, !!opts.reverse)
+	var onHashChange = evaluateCurrentPath.bind(null, routes, hashLocation, !!opts.reverse, onNotFound)
 
 	hashLocation.on('hashchange', onHashChange)
 
@@ -29,7 +31,7 @@ module.exports = function Router(opts, hashLocation) {
 	return {
 		add: add.bind(null, routes),
 		stop: stop,
-		evaluateCurrent: evaluateCurrentPathOrGoToDefault.bind(null, routes, hashLocation, !!opts.reverse),
+		evaluateCurrent: evaluateCurrentPathOrGoToDefault.bind(null, routes, hashLocation, !!opts.reverse, onNotFound),
 		setDefault: setDefault.bind(null, routes),
 		replace: hashLocation.replace,
 		go: hashLocation.go,
@@ -37,8 +39,8 @@ module.exports = function Router(opts, hashLocation) {
 	}
 }
 
-function evaluateCurrentPath(routes, hashLocation, reverse) {
-	evaluatePath(routes, hashLocation.get(), reverse)
+function evaluateCurrentPath(routes, hashLocation, reverse, onNotFound) {
+	evaluatePath(routes, hashLocation.get(), reverse, onNotFound)
 }
 
 function getPathParts(path) {
@@ -49,20 +51,20 @@ function getPathParts(path) {
 	}
 }
 
-function evaluatePath(routes, path, reverse) {
+function evaluatePath(routes, path, reverse, onNotFound) {
 	var pathParts = getPathParts(path)
 	path = pathParts.path
 	var queryStringParameters = pathParts.queryString
 
-	var matchingRoute = (reverse ? reverseArray(routes) : routes).find("".match, path)
+	var matchingRoute = (reverse ? reverseArray(routes) : routes).find(''.match, path)
 
 	if (matchingRoute) {
 		var regexResult = matchingRoute.exec(path)
 		var routeParameters = makeParametersObjectFromRegexResult(matchingRoute.keys, regexResult)
 		var params = xtend(queryStringParameters, routeParameters)
 		matchingRoute.fn(params)
-	} else if (routes.defaultFn) {
-		routes.defaultFn(path, queryStringParameters)
+	} else {
+		onNotFound(path, queryStringParameters)
 	}
 }
 
@@ -86,13 +88,11 @@ function add(routes, routeString, routeFunction) {
 	routes.push(newRoute)
 }
 
-function evaluateCurrentPathOrGoToDefault(routes, hashLocation, reverse, defaultPath) {
+function evaluateCurrentPathOrGoToDefault(routes, hashLocation, reverse, onNotFound, defaultPath) {
 	if (hashLocation.get()) {
 		var routesCopy = routes.slice()
-		routesCopy.defaultFn = function() {
-			hashLocation.go(defaultPath)
-		}
-		evaluateCurrentPath(routesCopy, hashLocation, reverse)
+
+		evaluateCurrentPath(routesCopy, hashLocation, reverse, onNotFound)
 	} else {
 		hashLocation.go(defaultPath)
 	}

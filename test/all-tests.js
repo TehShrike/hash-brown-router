@@ -2,17 +2,27 @@ var makeRouter = require('../')
 var test = require('tape-catch')
 
 module.exports = function tests(locationHash, delayAfterInitialRouteChange) {
-	function getRoute(cb, options) {
+	function getRoute(options) {
+		return options ? makeRouter(options, locationHash) : makeRouter(locationHash)
+	}
+
+	function startTest(cb) {
 		locationHash.go('')
 		setTimeout(function() {
-			var router = options ? makeRouter(options, locationHash) : makeRouter(locationHash)
-			cb(router)
+
+			cb(getRoute)
 		}, delayAfterInitialRouteChange || 0)
 	}
 
 	test('routing on a simple url', function(t) {
 		t.timeoutAfter(4000)
-		getRoute(function(route) {
+		startTest(function(getRoute) {
+			var route = getRoute({
+				onNotFound: function() {
+					t.fail('onNotFound was called')
+				}
+			})
+
 			route.add('/non-butts', function() {
 				t.fail('the wrong route was called')
 			})
@@ -23,27 +33,25 @@ module.exports = function tests(locationHash, delayAfterInitialRouteChange) {
 				t.end()
 			})
 
-			route.setDefault(function() {
-				t.fail('the default route was called')
-			})
-
 			locationHash.go('/butts')
 		})
 	})
 
-	test('default function is called when nothing matches', function(t) {
-		getRoute(function(route) {
+	test('onNotFound is called when nothing matches', function(t) {
+		startTest(function(getRoute) {
+			var route = getRoute({
+				onNotFound: function(path) {
+					t.pass('the default route was called')
+					t.equal('/lulz', path, 'the default path was passed in')
+					route.stop()
+					t.end()
+				}
+			})
+
 			var fail = t.fail.bind(t, 'the wrong route was called')
 
 			route.add('/butts', fail)
 			route.add('/non-butts', fail)
-
-			route.setDefault(function(path) {
-				t.pass('the default route was called')
-				t.equal('/lulz', path, 'the default path was passed in')
-				route.stop()
-				t.end()
-			})
 
 			locationHash.go('/lulz')
 		})
@@ -54,11 +62,17 @@ module.exports = function tests(locationHash, delayAfterInitialRouteChange) {
 	test('evaluating the current path instead of waiting for an onhashchange', function(t) {
 		t.timeoutAfter(4000)
 
-		getRoute(function(route) {
+		startTest(function(getRoute) {
+			t.plan(1)
+
 			locationHash.go('/butts')
 
 			setTimeout(function() {
-				t.plan(1)
+				var route = getRoute({
+					onNotFound: function() {
+						t.fail('onNotFound was called')
+					}
+				})
 
 				route.add('/non-butts', function() {
 					t.fail('the wrong route was called')
@@ -66,24 +80,21 @@ module.exports = function tests(locationHash, delayAfterInitialRouteChange) {
 
 				route.add('/butts', function() {
 					t.pass('the correct route was called')
-				})
-
-				route.setDefault(function() {
-					t.fail('the default route was called')
+					route.stop()
+					t.end()
 				})
 
 				// may not always want the route to fire in the same tick?
 				route.evaluateCurrent()
 
-				route.stop()
-
-				t.end()
 			}, 1000)
 		})
 	})
 
 	test('matching an express-style url, getting parameters back', function(t) {
-		getRoute(function(route) {
+		startTest(function(getRoute) {
+			var route = getRoute()
+
 			route.add('/no/way', t.fail.bind(t, 'the wrong route was called'))
 
 			route.add('/my/:special', function(parameters) {
@@ -101,7 +112,8 @@ module.exports = function tests(locationHash, delayAfterInitialRouteChange) {
 	})
 
 	test('route.evaluateCurrent calls the default route when the current path is empty', function(t) {
-		getRoute(function(route) {
+		startTest(function(getRoute) {
+			var route = getRoute()
 
 			route.add('/default', function() {
 				t.pass('the default route was called')
@@ -118,7 +130,9 @@ module.exports = function tests(locationHash, delayAfterInitialRouteChange) {
 	})
 
 	test('route.evaluateCurrent does not call the default route when the current path is not empty', function(t) {
-		getRoute(function(route) {
+		startTest(function(getRoute) {
+			var route = getRoute()
+
 			locationHash.go('/starting-path')
 
 			route.add('/default', t.fail.bind(t, 'the default route was called incorrectly'))
@@ -136,8 +150,32 @@ module.exports = function tests(locationHash, delayAfterInitialRouteChange) {
 		t.timeoutAfter(4000)
 	})
 
+	test('route.evaluateCurrent calls onNotFound when the current path is invalid', function(t) {
+		startTest(function(getRoute) {
+			var route = getRoute({
+				onNotFound: function() {
+					t.pass('onNotFound was called')
+					route.stop()
+					t.end()
+				}
+			})
+
+			locationHash.go('/some-unhandled-path')
+
+			route.add('/default', t.fail.bind(t, 'the default route was called incorrectly'))
+
+			setTimeout(function() {
+				route.evaluateCurrent('/default')
+			}, 100)
+		})
+
+		t.timeoutAfter(4000)
+	})
+
 	test('parameters include values from querystring', function(t) {
-		getRoute(function(route) {
+		startTest(function(getRoute) {
+			var route = getRoute()
+
 			route.add('/myroute/:fromUrl', function(parameters) {
 				t.equal(typeof parameters, 'object', 'parameters object is an object')
 				t.equal(Object.keys(parameters).length, 2, 'parameters object has two properties')
@@ -153,7 +191,9 @@ module.exports = function tests(locationHash, delayAfterInitialRouteChange) {
 	})
 
 	test('parameters from route overwrite querystring parameters', function(t) {
-		getRoute(function(route) {
+		startTest(function(getRoute) {
+			var route = getRoute()
+
 			route.add('/myroute/:fromUrl', function(parameters) {
 				t.equal(typeof parameters, 'object', 'parameters object is an object')
 				t.equal(Object.keys(parameters).length, 1, 'parameters object has one property')
@@ -169,16 +209,17 @@ module.exports = function tests(locationHash, delayAfterInitialRouteChange) {
 
 	})
 
-	test('querystring parameters passed to the default route', function(t) {
-		getRoute(function(route) {
+	test('querystring parameters passed to onNotFound on evaluateCurrent', function(t) {
+		startTest(function(getRoute) {
+			var route = getRoute({
+				onNotFound: function(path, parameters) {
+					t.equal(typeof parameters, 'object', 'parameters object is an object')
+					t.equal(parameters.lol, 'wut', 'value from the querystring was passed in')
+					t.equal(path, '/default', 'the /default path was correctly passed in')
 
-			route.setDefault(function(path, parameters) {
-				t.equal(typeof parameters, 'object', 'parameters object is an object')
-				t.equal(parameters.lol, 'wut', 'value from the querystring was passed in')
-				t.equal(path, '/default', 'the /default path was correctly passed in')
-
-				route.stop()
-				t.end()
+					route.stop()
+					t.end()
+				}
 			})
 
 			route.evaluateCurrent('/default?lol=wut')
@@ -188,7 +229,11 @@ module.exports = function tests(locationHash, delayAfterInitialRouteChange) {
 	})
 
 	test('replacing a url', function(t) {
-		getRoute(function(route) {
+		startTest(function(getRoute) {
+			var route = getRoute({
+				onNotFound: t.fail.bind(t, 'onNotFound called')
+			})
+
 			route.add('/initial', shouldHappenOnce('initial route', function() {
 				route.go('/redirect')
 			}))
@@ -202,8 +247,6 @@ module.exports = function tests(locationHash, delayAfterInitialRouteChange) {
 				route.stop()
 				t.end()
 			}))
-
-			route.setDefault(t.fail.bind(t, 'default route called'))
 
 			route.go('/initial')
 
@@ -227,7 +270,9 @@ module.exports = function tests(locationHash, delayAfterInitialRouteChange) {
 	})
 
 	test('by default, routes are evaluated oldest-to-newest', function(t) {
-		getRoute(function(route) {
+		startTest(function(getRoute) {
+			var route = getRoute()
+
 			route.add('/route/:oneThing', function() {
 				t.pass('the first route was called')
 				route.stop()
@@ -248,7 +293,8 @@ module.exports = function tests(locationHash, delayAfterInitialRouteChange) {
 	})
 
 	test('routes can be evaluated newest-to-oldest', function(t) {
-		getRoute(function(route) {
+		startTest(function(getRoute) {
+			var route = getRoute({ reverse: true })
 
 			route.add('/route/:oneThing', function() {
 				t.fail('the first route was called')
@@ -266,13 +312,14 @@ module.exports = function tests(locationHash, delayAfterInitialRouteChange) {
 				locationHash.go('/route/butts')
 			}, 50)
 
-		}, { reverse: true })
+		})
 
 		t.timeoutAfter(4000)
 	})
 
 	test('encoding in hash fragment', function(t) {
-		getRoute(function(route) {
+		startTest(function(getRoute) {
+			var route = getRoute({ reverse: true })
 
 			route.add('/route/:oneThing', function(parameters) {
 				t.equal(parameters.oneThing, 'thing with spaces')
@@ -290,14 +337,16 @@ module.exports = function tests(locationHash, delayAfterInitialRouteChange) {
 				locationHash.go('/route/thing with spaces')
 			}, 50)
 
-		}, { reverse: true })
+		})
 
 		t.timeoutAfter(4000)
 	})
 
 	test('reverse order is respected for evaluateCurrent()', function(t) {
 		// https://github.com/TehShrike/hash-brown-router/issues/8
-		getRoute(function(route) {
+		startTest(function(getRoute) {
+			var route = getRoute({ reverse: true })
+
 			locationHash.go('/route/butts')
 
 			route.add('/route/:oneThing', function() {
@@ -316,7 +365,7 @@ module.exports = function tests(locationHash, delayAfterInitialRouteChange) {
 				route.evaluateCurrent('/wat')
 			}, 50)
 
-		}, { reverse: true })
+		})
 
 		t.timeoutAfter(4000)
 	})
