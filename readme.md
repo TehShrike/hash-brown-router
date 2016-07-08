@@ -25,6 +25,7 @@ If the reverse option is false, routes are matched from oldest to newest - if th
 
 If reverse is set to true, the most recently added match is used.
 
+`onNotFound`: a function that will be called whenever a route change happens and there is no route handler.  Is passed two arguments: the path (a string) and a parameters object.
 
 ## `router.add(routeString, cb)` - add routes
 
@@ -35,16 +36,6 @@ router.add('/page/:pageName', function(parameters) {
 ```
 
 Parses [express-style](https://forbeslindesay.github.io/express-route-tester/) route paths, using a fork of [path-to-regexp](https://github.com/pillarjs/path-to-regexp).
-
-## `router.setDefault(cb)` - set a default/404 route
-
-```js
-router.setDefault(function(path, parameters) {
-	console.log("you went to", path, "but that doesn't go anywhere, I guess you just end up here")
-})
-```
-
-Called whenever the hash route changes, but no other matching route is found.
 
 ## `router.location.go(newPath)` - navigate to a new path
 
