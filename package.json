@@ -38,8 +38,8 @@
     "tape-run": "2.1.4"
   },
   "dependencies": {
-    "array.prototype.find": "^1.0.0",
-    "path-to-regexp-with-reversible-keys": "^1.0.3",
-    "xtend": "^4.0.0"
+    "array.prototype.find": "2.0.0",
+    "path-to-regexp-with-reversible-keys": "~1.0.3",
+    "xtend": "~4.0.0"
   }
 }
