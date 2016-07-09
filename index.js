@@ -5,8 +5,6 @@ var browserHashLocation = require('./hash-location.js')
 var EventEmitter = require('events').EventEmitter
 require('array.prototype.find')
 
-function noop() {}
-
 module.exports = function Router(opts, hashLocation) {
 	var emitter = new EventEmitter()
 	if (isHashLocation(opts)) {
