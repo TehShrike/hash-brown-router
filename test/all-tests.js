@@ -17,10 +17,10 @@ module.exports = function tests(locationHash, delayAfterInitialRouteChange) {
 	test('routing on a simple url', function(t) {
 		t.timeoutAfter(4000)
 		startTest(function(getRoute) {
-			var route = getRoute({
-				onNotFound: function() {
-					t.fail('onNotFound was called')
-				}
+			var route = getRoute()
+
+			route.on('not found', function() {
+				t.fail('"not found" was emitted')
 			})
 
 			route.add('/non-butts', function() {
@@ -39,13 +39,13 @@ module.exports = function tests(locationHash, delayAfterInitialRouteChange) {
 
 	test('onNotFound is called when nothing matches', function(t) {
 		startTest(function(getRoute) {
-			var route = getRoute({
-				onNotFound: function(path) {
-					t.pass('the default route was called')
-					t.equal('/lulz', path, 'the default path was passed in')
-					route.stop()
-					t.end()
-				}
+			var route = getRoute()
+
+			route.on('not found', function(path) {
+				t.pass('the default route was called')
+				t.equal('/lulz', path, 'the default path was passed in')
+				route.stop()
+				t.end()
 			})
 
 			var fail = t.fail.bind(t, 'the wrong route was called')
@@ -68,10 +68,10 @@ module.exports = function tests(locationHash, delayAfterInitialRouteChange) {
 			locationHash.go('/butts')
 
 			setTimeout(function() {
-				var route = getRoute({
-					onNotFound: function() {
-						t.fail('onNotFound was called')
-					}
+				var route = getRoute()
+
+				route.on('not found', function() {
+					t.fail('"not found" was emitted')
 				})
 
 				route.add('/non-butts', function() {
@@ -152,12 +152,12 @@ module.exports = function tests(locationHash, delayAfterInitialRouteChange) {
 
 	test('route.evaluateCurrent calls onNotFound when the current path is invalid', function(t) {
 		startTest(function(getRoute) {
-			var route = getRoute({
-				onNotFound: function() {
-					t.pass('onNotFound was called')
-					route.stop()
-					t.end()
-				}
+			var route = getRoute()
+
+			route.on('not found', function() {
+				t.pass('"not found" was emitted')
+				route.stop()
+				t.end()
 			})
 
 			locationHash.go('/some-unhandled-path')
@@ -211,15 +211,15 @@ module.exports = function tests(locationHash, delayAfterInitialRouteChange) {
 
 	test('querystring parameters passed to onNotFound on evaluateCurrent', function(t) {
 		startTest(function(getRoute) {
-			var route = getRoute({
-				onNotFound: function(path, parameters) {
-					t.equal(typeof parameters, 'object', 'parameters object is an object')
-					t.equal(parameters.lol, 'wut', 'value from the querystring was passed in')
-					t.equal(path, '/default', 'the /default path was correctly passed in')
+			var route = getRoute()
 
-					route.stop()
-					t.end()
-				}
+			route.on('not found', function(path, parameters) {
+				t.equal(typeof parameters, 'object', 'parameters object is an object')
+				t.equal(parameters.lol, 'wut', 'value from the querystring was passed in')
+				t.equal(path, '/default', 'the /default path was correctly passed in')
+
+				route.stop()
+				t.end()
 			})
 
 			route.evaluateCurrent('/default?lol=wut')
@@ -230,9 +230,9 @@ module.exports = function tests(locationHash, delayAfterInitialRouteChange) {
 
 	test('replacing a url', function(t) {
 		startTest(function(getRoute) {
-			var route = getRoute({
-				onNotFound: t.fail.bind(t, 'onNotFound called')
-			})
+			var route = getRoute()
+
+			route.on('not found', t.fail.bind(t, 'onNotFound called'))
 
 			route.add('/initial', shouldHappenOnce('initial route', function() {
 				route.go('/redirect')

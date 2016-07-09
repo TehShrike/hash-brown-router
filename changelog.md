@@ -1,6 +1,18 @@
+# 3.0.0
+
+- Using a callback instead of emitting an event was a mistake and have repented.  Switched from callback to event emitter, fixing [#11](https://github.com/TehShrike/hash-brown-router/issues/11) again
+
+# 2.0.2
+
+- actually removing the `setDefault` method that I claimed to have dropped in this major version [#907d1689](https://github.com/TehShrike/hash-brown-router/commit/907d16892d6a50c1c0642eee817a9aab1aa90495)
+
+# 2.0.1
+
+- documentation: improved the readme around onNotFound
+
 # 2.0.0
 
-- removed `setDefault`, added an `onNotFound` property to options.  Pull request [#12](https://github.com/TehShrike/hash-brown-router/pull/12)
+- removed `setDefault`, added an `onNotFound` property to options.  Fixes [#11](https://github.com/TehShrike/hash-brown-router/issues/11), pull request [#12](https://github.com/TehShrike/hash-brown-router/pull/12)
 
 # 1.5.3
 
