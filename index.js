@@ -33,7 +33,6 @@ module.exports = function Router(opts, hashLocation) {
 		add: add.bind(null, routes),
 		stop: stop,
 		evaluateCurrent: evaluateCurrentPathOrGoToDefault.bind(null, routes, hashLocation, !!opts.reverse, onNotFound),
-		setDefault: setDefault.bind(null, routes),
 		replace: hashLocation.replace,
 		go: hashLocation.go,
 		location: hashLocation
@@ -97,10 +96,6 @@ function evaluateCurrentPathOrGoToDefault(routes, hashLocation, reverse, onNotFo
 	} else {
 		hashLocation.go(defaultPath)
 	}
-}
-
-function setDefault(routes, defaultFn) {
-	routes.defaultFn = defaultFn
 }
 
 function isHashLocation(hashLocation) {
