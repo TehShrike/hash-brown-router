@@ -9,6 +9,29 @@ This library:
 1. uses a path-parsing library that lets you [generate links programmatically](https://github.com/tehshrike/page-path-builder#usage)
 2. comes with a handy stub for testing - any library that takes hash-brown-router can use the included [stub](#testability) in unit tests.
 
+# Example
+
+```js
+var router = require('hash-brown-router')()
+
+var mainElement = document.getElementById('main')
+
+router.add('/', function() {
+	mainElement.innerHTML = 'Thank you for visiting my site! This is the home screen.'
+})
+
+router.add('/blog-post/:blogPostName', function (parameters) {
+	mainElement.innerHTML = getHtmlForBlogPost(parameters.blogPostName)
+})
+
+router.on('not found', function (path, querystringParameters) {
+	alert('Couldn\'t find that page, sorry! Redirecting you to the home screen.')
+	router.location.replace('/')
+})
+
+router.evaluateCurrent('/')
+```
+
 # API
 
 ## Construction
