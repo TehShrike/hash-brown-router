@@ -2,6 +2,8 @@
 
 A router that is only concerned with single-page apps that want to change state based on the bits of the url after the hash.
 
+Want to use this router, but with `go` translated to `pushState`?  Use this library with [`sausage-router`](https://github.com/TehShrike/sausage-router/)!
+
 ## Why another client-side routing library?
 
 This library:
@@ -39,11 +41,12 @@ router.evaluateCurrent('/')
 ```js
 var makeRouter = require('hash-brown-router')
 
-var router = makeRouter(options)
+var router = makeRouter(options, [location object])
 ```
 
 - `options`: an object of options
 	- `reverse`: By default, routes are matched from oldest to newest. So if there are multiple matching routes for the current url, the first one that was added is used.  If `reverse` is set to `true`, then the most recently added match is used.
+- `location`, an abstraction of the browser's location matching [this interface](https://github.com/TehShrike/hash-brown-router/blob/master/hash-location-mock.js#L3-L23)
 
 The router is an event emitter that emits:
 
