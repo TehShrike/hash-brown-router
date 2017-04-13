@@ -2,7 +2,7 @@ var pathToRegexp = require('path-to-regexp-with-reversible-keys')
 var qs = require('querystring')
 var xtend = require('xtend')
 var browserHashLocation = require('./hash-location.js')
-var EventEmitter = require('events').EventEmitter
+var EventEmitter = require('events')
 require('array.prototype.find')
 
 module.exports = function Router(opts, hashLocation) {

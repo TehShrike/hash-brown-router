@@ -1,4 +1,4 @@
-var EventEmitter = require('events').EventEmitter
+var EventEmitter = require('events')
 
 module.exports = function HashLocation(window) {
 	var emitter = new EventEmitter()
