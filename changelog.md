@@ -1,3 +1,11 @@
+# 3.0.2
+
+- compatibility: changed `require('events').EventEmitter` to `require('events')` for better Rollup compatibility [#b01c88cd](https://github.com/TehShrike/hash-brown-router/commit/b01c88cd7ad2a915800ed21257bb2a3674b91a50)
+
+# 3.0.1
+
+- Documentation: adding an example to the readme [#16](https://github.com/TehShrike/hash-brown-router/pull/16)
+
 # 3.0.0
 
 - Using a callback instead of emitting an event was a mistake and have repented.  Switched from callback to event emitter, fixing [#11](https://github.com/TehShrike/hash-brown-router/issues/11) again
