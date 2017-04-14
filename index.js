@@ -92,7 +92,8 @@ function add(routes, routeString, routeFunction) {
 }
 
 function evaluateCurrentPathOrGoToDefault(routes, hashLocation, reverse, onNotFound, defaultPath) {
-	if (hashLocation.get()) {
+	const currentLocation = hashLocation.get()
+	if (currentLocation && currentLocation !== '/') {
 		var routesCopy = routes.slice()
 
 		evaluateCurrentPath(routesCopy, hashLocation, reverse, onNotFound)

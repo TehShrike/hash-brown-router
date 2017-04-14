@@ -6,10 +6,9 @@ module.exports = function tests(locationHash, delayAfterInitialRouteChange) {
 		return options ? makeRouter(options, locationHash) : makeRouter(locationHash)
 	}
 
-	function startTest(cb) {
-		locationHash.go('')
+	function startTest(cb, startingLocation) {
+		locationHash.go(startingLocation || '')
 		setTimeout(function() {
-
 			cb(getRoute)
 		}, delayAfterInitialRouteChange || 0)
 	}
@@ -86,7 +85,6 @@ module.exports = function tests(locationHash, delayAfterInitialRouteChange) {
 
 				// may not always want the route to fire in the same tick?
 				route.evaluateCurrent()
-
 			}, 1000)
 		})
 	})
@@ -206,7 +204,6 @@ module.exports = function tests(locationHash, delayAfterInitialRouteChange) {
 		})
 
 		t.timeoutAfter(4000)
-
 	})
 
 	test('querystring parameters passed to onNotFound on evaluateCurrent', function(t) {
@@ -224,6 +221,25 @@ module.exports = function tests(locationHash, delayAfterInitialRouteChange) {
 
 			route.evaluateCurrent('/default?lol=wut')
 		})
+
+		t.timeoutAfter(4000)
+	})
+
+	test('evaluateCurrent works correctly when explicitly starting at route /', function(t) {
+		startTest(function(getRoute) {
+			var route = getRoute()
+
+			route.on('not found', function(path, parameters) {
+				t.equal(typeof parameters, 'object', 'parameters object is an object')
+				t.equal(parameters.lol, 'wut', 'value from the querystring was passed in')
+				t.equal(path, '/default', 'the /default path was correctly passed in')
+
+				route.stop()
+				t.end()
+			})
+
+			route.evaluateCurrent('/default?lol=wut')
+		}, '/')
 
 		t.timeoutAfter(4000)
 	})
@@ -249,7 +265,6 @@ module.exports = function tests(locationHash, delayAfterInitialRouteChange) {
 			}))
 
 			route.go('/initial')
-
 		})
 
 		t.timeoutAfter(4000)
@@ -266,7 +281,6 @@ module.exports = function tests(locationHash, delayAfterInitialRouteChange) {
 				cb && cb.apply(null, arguments)
 			}
 		}
-
 	})
 
 	test('by default, routes are evaluated oldest-to-newest', function(t) {
@@ -286,7 +300,6 @@ module.exports = function tests(locationHash, delayAfterInitialRouteChange) {
 			setTimeout(function() {
 				locationHash.go('/route/butts')
 			}, 50)
-
 		})
 
 		t.timeoutAfter(4000)
@@ -311,7 +324,6 @@ module.exports = function tests(locationHash, delayAfterInitialRouteChange) {
 			setTimeout(function() {
 				locationHash.go('/route/butts')
 			}, 50)
-
 		})
 
 		t.timeoutAfter(4000)
@@ -336,7 +348,6 @@ module.exports = function tests(locationHash, delayAfterInitialRouteChange) {
 			setTimeout(function() {
 				locationHash.go('/route/thing with spaces')
 			}, 50)
-
 		})
 
 		t.timeoutAfter(4000)
@@ -364,7 +375,6 @@ module.exports = function tests(locationHash, delayAfterInitialRouteChange) {
 			setTimeout(function() {
 				route.evaluateCurrent('/wat')
 			}, 50)
-
 		})
 
 		t.timeoutAfter(4000)
