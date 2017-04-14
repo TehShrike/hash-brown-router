@@ -1,3 +1,7 @@
+# 3.1.0
+
+- behavior change: `/` routes are now considered equivalent to empty routes.  This makes it so that when the sausage-router returns `/` when the page first loads, it behaves like you would expect. [#08f93795](https://github.com/TehShrike/hash-brown-router/commit/08f93795356fd6fd258960bbe83585e05e59900a)
+
 # 3.0.2
 
 - compatibility: changed `require('events').EventEmitter` to `require('events')` for better Rollup compatibility [#b01c88cd](https://github.com/TehShrike/hash-brown-router/commit/b01c88cd7ad2a915800ed21257bb2a3674b91a50)
