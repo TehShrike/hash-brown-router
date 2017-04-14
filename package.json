@@ -7,8 +7,6 @@
     "test": "npm run localtest && npm run browser",
     "localtest": "node test/automated-test.js",
     "watch": "watchify test/browser-test.js -o browser-test.js -d",
-    "browserstackbuild": "browserify test/browser-test.js node_modules/browserstack-tape-reporter/index.js -o browser-test.js -d",
-    "browserstack": "npm run browserstackbuild && browserstack-runner",
     "browser": "browserify test/browser-test.js | tape-run"
   },
   "repository": {
@@ -31,8 +29,6 @@
   "devDependencies": {
     "browser-run": "3.5.0",
     "browserify": "~11.0.0",
-    "browserstack-runner": "0.4.4",
-    "browserstack-tape-reporter": "~1.0.0",
     "tap-browser-color": "^0.1.2",
     "tape": "~4.1.0",
     "tape-catch": "1.0.4",
