@@ -1,9 +1,8 @@
 var pathToRegexp = require('path-to-regexp-with-reversible-keys')
-var qs = require('querystring')
+var qs = require('query-string')
 var xtend = require('xtend')
 var browserHashLocation = require('./hash-location.js')
-var EventEmitter = require('events')
-require('array.prototype.find')
+var EventEmitter = require('eventemitter3')
 
 module.exports = function Router(opts, hashLocation) {
 	var emitter = new EventEmitter()
@@ -59,7 +58,7 @@ function evaluatePath(routes, path, reverse, onNotFound) {
 	path = pathParts.path
 	var queryStringParameters = pathParts.queryString
 
-	var matchingRoute = (reverse ? reverseArray(routes) : routes).find(''.match, path)
+	var matchingRoute = find((reverse ? reverseArray(routes) : routes), path)
 
 	if (matchingRoute) {
 		var regexResult = matchingRoute.exec(path)
@@ -104,4 +103,12 @@ function evaluateCurrentPathOrGoToDefault(routes, hashLocation, reverse, onNotFo
 
 function isHashLocation(hashLocation) {
 	return hashLocation && hashLocation.go && hashLocation.replace && hashLocation.on
+}
+
+function find(aryOfRegexes, str) {
+	for (var i = 0; i < aryOfRegexes.length; ++i) {
+		if (str.match(aryOfRegexes[i])) {
+			return aryOfRegexes[i]
+		}
+	}
 }
