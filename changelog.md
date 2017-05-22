@@ -1,3 +1,7 @@
+# 3.2.0
+
+- Switched from dependencies on node core modules to ones on npm, and dropped a huge `Array.prototype.find` polyfill. [#880f3db1](https://github.com/TehShrike/hash-brown-router/commit/880f3db14cd67018f748baca198dab19dcf23a9d) and [#de7f8c39](https://github.com/TehShrike/hash-brown-router/commit/de7f8c39c25e1fab70d76e0a172d36a4a739bb0b)
+
 # 3.1.0
 
 - behavior change: `/` routes are now considered equivalent to empty routes.  This makes it so that when the sausage-router returns `/` when the page first loads, it behaves like you would expect. [#08f93795](https://github.com/TehShrike/hash-brown-router/commit/08f93795356fd6fd258960bbe83585e05e59900a)
