@@ -35,7 +35,6 @@
     "tape-run": "2.1.4"
   },
   "dependencies": {
-    "array.prototype.find": "2.0.0",
     "eventemitter3": "2.0.3",
     "path-to-regexp-with-reversible-keys": "~1.0.3",
     "query-string": "4.3.4",
