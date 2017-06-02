@@ -379,4 +379,25 @@ module.exports = function tests(locationHash, delayAfterInitialRouteChange) {
 
 		t.timeoutAfter(4000)
 	})
+	
+	test('routing on a simple url with spaces', function(t) {
+		t.timeoutAfter(4000)
+		getRoute(function(route) {
+			route.add('/non-butts', function() {
+				t.fail('the wrong route was called')
+			})
+
+			route.add('/more butts', function() {
+				route.stop()
+				t.pass('the correct route was called')
+				t.end()
+			})
+
+			route.setDefault(function() {
+				t.fail('the default route was called')
+			})
+
+			locationHash.go('/more butts')
+		})
+	})
 }
