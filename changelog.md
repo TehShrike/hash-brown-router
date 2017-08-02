@@ -1,3 +1,11 @@
+# 3.3.0
+
+- Added tests and fixes so that routes should not be fired when the user attempts to navigate to the current route. [#18](https://github.com/TehShrike/hash-brown-router/pull/18)
+
+# 3.2.1
+
+- Added a test for when the back button is pressed [#a5cd13](https://github.com/TehShrike/hash-brown-router/commit/a5cd13180aab41e6369036f3d090f60ded28eb18)
+
 # 3.2.0
 
 - Switched from dependencies on node core modules to ones on npm, and dropped a huge `Array.prototype.find` polyfill. [#880f3db1](https://github.com/TehShrike/hash-brown-router/commit/880f3db14cd67018f748baca198dab19dcf23a9d) and [#de7f8c39](https://github.com/TehShrike/hash-brown-router/commit/de7f8c39c25e1fab70d76e0a172d36a4a739bb0b)

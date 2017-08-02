@@ -1,2 +1,4 @@
 *build.js
 browser-test.js
+.source*
+node_modules

@@ -10,10 +10,19 @@ module.exports = function HashLocation(window) {
 			last = emitter.get()
 			emitter.emit('hashchange')
 		}
+
 	})
 
-	emitter.go = go.bind(null, window)
-	emitter.replace = replace.bind(null, window)
+	function ifRouteIsDifferent(actualNavigateFunction) {
+		return function navigate(newPath) {
+			if (newPath !== last) {
+				actualNavigateFunction(window, newPath)
+			}
+		}
+	}
+
+	emitter.go = ifRouteIsDifferent(go)
+	emitter.replace = ifRouteIsDifferent(replace)
 	emitter.get = get.bind(null, window, needToDecode)
 
 	return emitter

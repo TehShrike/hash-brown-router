@@ -9,8 +9,10 @@ module.exports = function HashLocationMock() {
 	}
 
 	emitter.go = function(newPath) {
-		currentRoute = newPath
-		onHashChange()
+		if (currentRoute !== newPath) {
+			currentRoute = newPath
+			onHashChange()
+		}
 	}
 
 	emitter.replace = emitter.go

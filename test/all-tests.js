@@ -379,4 +379,72 @@ module.exports = function tests(locationHash, delayAfterInitialRouteChange) {
 
 		t.timeoutAfter(4000)
 	})
+
+	test('Go to one url, then go to another url', function(t) {
+		startTest(function(getRoute) {
+			var route = getRoute()
+
+			route.add('/some-place', function() {
+				t.pass('the first route was called')
+				setTimeout(function() {
+					route.go('/some-place-else')
+				}, 50)
+			})
+
+			route.add('/some-place-else', function() {
+				t.pass('the second route was called')
+				setTimeout(function() {
+					route.go('/yet-another-place')
+				}, 50)
+			})
+
+			route.add('/yet-another-place', function() {
+				t.pass('the third route was called')
+				route.stop()
+				t.end()
+			})
+
+			setTimeout(function() {
+				route.go('/some-place')
+			}, 50)
+		})
+
+		t.timeoutAfter(4000)
+	})
+
+	test('Navigating to the same url is a no-op', function(t) {
+		startTest(function(getRoute) {
+			var route = getRoute()
+			var timesFirstRouteCalled = 0
+
+			route.add('/some-place', function() {
+				timesFirstRouteCalled++
+
+				if (timesFirstRouteCalled > 1) {
+					t.fail('some-place route called more than once')
+					t.end()
+				} else {
+					setTimeout(function() {
+						route.go('/some-place')
+
+						setTimeout(function() {
+							t.equal(timesFirstRouteCalled, 1)
+							t.end()
+						}, 100)
+					}, 100)
+				}
+			})
+
+			route.add('/some-place-else', function() {
+				t.pass('some-place-else was called')
+				setTimeout(function() {
+					route.go('/some-place')
+				}, 100)
+			})
+
+			route.go('/some-place-else')
+		})
+
+		t.timeoutAfter(4000)
+	})
 }
