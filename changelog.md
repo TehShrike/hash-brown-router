@@ -1,3 +1,7 @@
+# 3.3.1
+
+- Fixed a bug where calling `evaluteCurrent('/')` when the current url was `/` wouldn't do anything [#56c207f0](https://github.com/TehShrike/hash-brown-router/commit/56c207f011600722f2a805f88ab2381eb55fde2f)
+
 # 3.3.0
 
 - Added tests and fixes so that routes should not be fired when the user attempts to navigate to the current route. [#18](https://github.com/TehShrike/hash-brown-router/pull/18)
