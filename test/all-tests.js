@@ -244,6 +244,32 @@ module.exports = function tests(locationHash, delayAfterInitialRouteChange) {
 		t.timeoutAfter(4000)
 	})
 
+	test('evaluateCurrent fires the / route when the url is currently /', function(t) {
+		t.plan(1)
+
+		startTest(function(getRoute) {
+			var route = getRoute()
+
+			route.on('not found', function(path, parameters) {
+				t.fail('Should not fire the not found route')
+
+				route.stop()
+				t.end()
+			})
+
+			route.add('/', function(parameters) {
+				t.deepEqual(parameters, {})
+
+				route.stop()
+				t.end()
+			})
+
+			route.evaluateCurrent('/')
+		}, '/')
+
+		t.timeoutAfter(4000)
+	})
+
 	test('replacing a url', function(t) {
 		startTest(function(getRoute) {
 			var route = getRoute()

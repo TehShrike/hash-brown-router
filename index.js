@@ -49,7 +49,7 @@ function getPathParts(path) {
 	var chunks = path.split('?')
 	return {
 		path: chunks.shift(),
-		queryString: qs.parse(chunks.join(''))
+		queryString: qs.parse(chunks.join('')),
 	}
 }
 
@@ -91,10 +91,11 @@ function add(routes, routeString, routeFunction) {
 }
 
 function evaluateCurrentPathOrGoToDefault(routes, hashLocation, reverse, onNotFound, defaultPath) {
-	const currentLocation = hashLocation.get()
-	if (currentLocation && currentLocation !== '/') {
-		var routesCopy = routes.slice()
+	var currentLocation = hashLocation.get()
+	var canUseCurrentLocation = currentLocation && (currentLocation !== '/' || defaultPath === '/')
 
+	if (canUseCurrentLocation) {
+		var routesCopy = routes.slice()
 		evaluateCurrentPath(routesCopy, hashLocation, reverse, onNotFound)
 	} else {
 		hashLocation.go(defaultPath)
