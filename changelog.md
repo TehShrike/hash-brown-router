@@ -1,3 +1,7 @@
+# 3.4.0
+
+- Ignore fake-o hash fragments at the end of the url [#d51d4e42](https://github.com/TehShrike/hash-brown-router/commit/d51d4e42bb42e39643b4750fc3214c663a71fe79)
+
 # 3.3.1
 
 - Fixed a bug where calling `evaluteCurrent('/')` when the current url was `/` wouldn't do anything [#56c207f0](https://github.com/TehShrike/hash-brown-router/commit/56c207f011600722f2a805f88ab2381eb55fde2f)
