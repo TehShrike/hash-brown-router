@@ -42,7 +42,7 @@ module.exports = function Router(opts, hashLocation) {
 }
 
 function evaluateCurrentPath(routes, hashLocation, reverse, onNotFound) {
-	evaluatePath(routes, hashLocation.get(), reverse, onNotFound)
+	evaluatePath(routes, stripHashFragment(hashLocation.get()), reverse, onNotFound)
 }
 
 function getPathParts(path) {
@@ -91,7 +91,7 @@ function add(routes, routeString, routeFunction) {
 }
 
 function evaluateCurrentPathOrGoToDefault(routes, hashLocation, reverse, onNotFound, defaultPath) {
-	var currentLocation = hashLocation.get()
+	var currentLocation = stripHashFragment(hashLocation.get())
 	var canUseCurrentLocation = currentLocation && (currentLocation !== '/' || defaultPath === '/')
 
 	if (canUseCurrentLocation) {
@@ -100,6 +100,12 @@ function evaluateCurrentPathOrGoToDefault(routes, hashLocation, reverse, onNotFo
 	} else {
 		hashLocation.go(defaultPath)
 	}
+}
+
+var urlWithoutHashFragmentRegex = /^([^#]*)(:?#.*)?$/
+function stripHashFragment(url) {
+	var match = url.match(urlWithoutHashFragmentRegex)
+	return match ? match[1] : ''
 }
 
 function isHashLocation(hashLocation) {

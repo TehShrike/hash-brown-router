@@ -473,4 +473,23 @@ module.exports = function tests(locationHash, delayAfterInitialRouteChange) {
 
 		t.timeoutAfter(4000)
 	})
+
+	test('hash fragments are ignored', function(t) {
+		startTest(function(getRoute) {
+			var route = getRoute()
+
+			route.add('/myroute/:fromUrl', function(parameters) {
+				t.equal(Object.keys(parameters).length, 2, 'parameters object has two properties')
+				t.equal(parameters.fromUrl, 'value1', 'Value from the url parameter is correct')
+				t.equal(parameters.fromQueryString, 'value2', 'Value from the query string is correct')
+				route.stop()
+				t.end()
+			})
+
+			locationHash.go('/myroute/value1?fromQueryString=value2#whatever')
+		})
+		t.timeoutAfter(4000)
+	})
+
+
 }
